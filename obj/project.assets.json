@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
+      "projectUniqueName": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
       "projectName": "CourseProjectCSharp",
-      "projectPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
+      "projectPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
       "packagesPath": "C:\\Users\\BudoB\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProjectCSharp\\obj\\",
+      "outputPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\BudoB\\AppData\\Roaming\\NuGet\\NuGet.Config"

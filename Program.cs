@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace SyntaxHighlightingDemo
+namespace CourseProject
 {
     class Program
     {
+        // Define a sample data object
+        PersonClass person = new PersonClass("John", "Doe", 30);
         // This is a single-line comment
 
         /*
@@ -17,6 +20,7 @@ namespace SyntaxHighlightingDemo
             string name = "John";
             double price = 19.99;
             bool isStudent = true;
+            Dictionary<string, int> myDictionary = new Dictionary<string, int>();
 
             // Console output
             Console.WriteLine($"Hello, {name}!");
@@ -58,6 +62,18 @@ namespace SyntaxHighlightingDemo
         // Function definition
         static int AddNumbers(int a, int b) {
             return a + b;
+        }
+    }
+    public class PersonClass
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int Age { get; set; }
+        public PersonClass(string firstName, string lastName, int age)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Age = age;
         }
     }
 }
