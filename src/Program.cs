@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace CourseProject;
 
@@ -57,6 +58,14 @@ class Program
         // Functions
         int sum = AddNumbers(3, 4);
         Console.WriteLine($"Sum: {sum}");
+
+        // regex test
+        string htmlTest = HtmlInfoParser.HtmlTestInput();
+        Dictionary<string, string> dct = HtmlInfoParser.ParseAllInfo(htmlTest);
+        foreach (KeyValuePair<string, string> kvp in dct)
+        {
+            Console.WriteLine($"Key: {kvp.Key}, Value: {kvp.Value}");
+        }
     }
 
     // Function definition
@@ -64,6 +73,8 @@ class Program
         return a + b;
     }
 }
+
+
 public class PersonClass
 {
     public string FirstName { get; set; }
