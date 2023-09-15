@@ -11,18 +11,18 @@ public static class HtmlInfoParser
         foreach (InfoDataPoint dataPoint in Enum.GetValues(typeof(InfoDataPoint)))
         {
             string renamedKey = InfoDataPointNames.RenamedKeys[dataPoint];
-            string parsedValue = ParseInfoDataPoint(pageSource, dataPoint);
+            string parsedValue = ParseDataPoint(pageSource, dataPoint);
             dct.Add(renamedKey, parsedValue);
         }
         return dct;
     }
 
-    public static string ParseInfoDataPoint(string pageSource, InfoDataPoint dataPoint)
+    public static string ParseDataPoint(string pageSource, InfoDataPoint dataPoint)
     {
         string websiteKey = DtuWebsiteInfoKeysEnglish[dataPoint];
         string escapedWebsiteKey = PatternMatcher.EscapeSpecialCharacters(websiteKey);
-        Func<string, string, string> InfoParser = InfoKeysToMethodMap[dataPoint];
-        return InfoParser(escapedWebsiteKey, pageSource);
+        Func<string, string, string> ParserMethod = ParserMethodMap[dataPoint];
+        return ParserMethod(escapedWebsiteKey, pageSource);
     }
 
     public static string ParseInfofromMainTable(string websiteKey, string pageSource)
@@ -115,7 +115,7 @@ public static class HtmlInfoParser
         return PatternMatcher.TrimHtmlAndGet(pattern, pageSource, groupIndex);
     }
 
-    public static readonly Dictionary<InfoDataPoint, Func<string, string, string>> InfoKeysToMethodMap = new()
+    public static readonly Dictionary<InfoDataPoint, Func<string, string, string>> ParserMethodMap = new()
     {
         {InfoDataPoint.CourseID, ParseCourseIdInfo},
         {InfoDataPoint.CourseName, ParseCourseNameInfo},
@@ -160,10 +160,10 @@ public static class HtmlInfoParser
     public static readonly Dictionary<InfoDataPoint, string> DtuWebsiteInfoKeysEnglish = new()
     {
         {InfoDataPoint.CourseID, "Course ID"}, // Named by me (not used on the DTU website)!
-        {InfoDataPoint.CourseName, "Course name"}, // Named by me (not used on the DTU website)!
-        {InfoDataPoint.Year, "Year"}, // Named by me (not used on the DTU website)!
-        {InfoDataPoint.Announcement, "Announcement"}, // Named by me (not used on the DTU website)!
-        {InfoDataPoint.StudyLines, "Study lines"}, // Named by me (not used on the DTU website)!
+        {InfoDataPoint.CourseName, "Course name"},  // Same as above
+        {InfoDataPoint.Year, "Year"},  // Same as above
+        {InfoDataPoint.Announcement, "Announcement"},  // Same as above
+        {InfoDataPoint.StudyLines, "Study lines"},  // Same as above
         {InfoDataPoint.DanishTitle, "Danish title"},
         {InfoDataPoint.LanguageOfInstruction, "Language of instruction"},
         {InfoDataPoint.Ects, "Point( ECTS )"},

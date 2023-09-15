@@ -22,6 +22,29 @@ public static class PatternMatcher
         }
     }
 
+    public static Dictionary<string, string> GetMultiple(string pattern, string html)
+    {
+        Dictionary<string, string> dct = new();
+        Regex regex = new Regex(pattern, RegexOptions.Singleline);
+        MatchCollection matchCollection = regex.Matches(html);
+
+        foreach (Match match in matchCollection)
+        {
+            if (match.Success)
+            {
+                string option = match.Groups[1].Value;
+                string optionCount = match.Groups[2].Value;
+                dct.Add(option, optionCount);
+            }
+            else
+            {
+                dct.Add(PatternNotFound, PatternNotFound);
+                break;
+            }
+        }
+        return dct;
+    }
+
     public static string TrimHtmlAndGet(string pattern, string html, int groupIndex)
     {
         string singleLineHtml = RemoveNewlines(html);
@@ -42,6 +65,11 @@ public static class PatternMatcher
             escapedString.Append(c);
         }
         return escapedString.ToString();
+    }
+
+    public static string RemoveEscapeCharacters(string input)
+    {
+        return Regex.Unescape(input);
     }
 
     public static string RemoveNewlines(string input)
