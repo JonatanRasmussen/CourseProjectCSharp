@@ -1,5 +1,5 @@
 
-
+/*
 namespace CourseProject;
 
 public class HtmlParser<TDataPoint>
@@ -37,6 +37,6 @@ public class HtmlParser<TDataPoint>
     public static Dictionary<TDataPoint, Func<string, string, string>> ParserMethodMap = new();
 
     // Usage
-    var evalResult = HtmlParser<EvalDataPoint>.ParseAll("pageSourceHere", EvalDataPointNames.RenamedKeys, DtuWebsiteKeys.EvalDataPoints);
-    var infoResult = HtmlParser<InfoDataPoint>.ParseAll("pageSourceHere", InfoDataPointNames.RenamedKeys, DtuWebsiteKeys.InfoPoints);
+
 }
+*/

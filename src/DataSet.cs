@@ -3,22 +3,22 @@
 namespace CourseProject;
 
 
-public interface IDataSet<TEnum> where TEnum : Enum
+public interface IDataSet
 {
-    TEnum DataPoint { get; set; }
-    string Html();
+    Dictionary<string, string> JsonDict { get; }
+    string Html { get; }
 }
 
 public class DataSet : IDataSet
 {
 
-    public static string WebsiteEnglishKey { get; }
-    public static string WebsiteDanishKey { get; }
     public static readonly string CustomName = "Yo";
-
-    public DataPoint(string name)
+    public string Html { get; }
+    public Dictionary<string, string> JsonDict { get; }
+    public DataSet()
     {
-        Name = name;
+        Html = "test";
+        JsonDict = new();
     }
 
     public static string Parse()

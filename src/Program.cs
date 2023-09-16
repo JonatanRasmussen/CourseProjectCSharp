@@ -2257,6 +2257,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             Console.WriteLine($"{kvp.Key}: {kvp.Value}");
         }
         Console.WriteLine(PatternMatcher.RemoveEscapeCharacters("\u00F8"));
+
+
     }
 
     public static Dictionary<string, string> GetQuestionData(string questionIndex, string html)
@@ -2314,6 +2316,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         // Return statement
         return result;
+
     }
 }
 

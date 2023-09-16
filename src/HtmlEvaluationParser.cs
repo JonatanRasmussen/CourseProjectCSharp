@@ -9,7 +9,7 @@ public static class HtmlEvaluationParser
         Dictionary<string, string> dct = new();
         foreach (EvalDataPoint dataPoint in Enum.GetValues(typeof(EvalDataPoint)))
         {
-            string renamedKey = EvalDataPointNames.RenamedKeys[dataPoint];
+            string renamedKey = DtuWebsiteEvalDataPoints[dataPoint];
             string parsedValue = ParseDataPoint(pageSource, dataPoint);
             dct.Add(renamedKey, parsedValue);
         }
