@@ -121,7 +121,7 @@ public static class HtmlEvaluationParser
         string middle = "(.*?)";
         string end = "</div>.*?<span>(\\d+)</span>";
         string pattern = $"{start}{middle}{end}";
-        Dictionary<string, string> answers = PatternMatcher.GetMultiple(pattern, isolatedHtml);
+        Dictionary<string, string> answers = PatternMatcher.GetDict(pattern, isolatedHtml);
 
         foreach (var kvp in answers)
         {

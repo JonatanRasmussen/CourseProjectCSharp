@@ -2289,7 +2289,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         string middle3 = "(.*?)";
         string end3 = "</div>.*?<span>(\\d+)</span>";
         string pattern3 = $"{start3}{middle3}{end3}";
-        Dictionary<string, string> answers = PatternMatcher.GetMultiple(pattern3, isolatedHtml);
+        Dictionary<string, string> answers = PatternMatcher.GetDict(pattern3, isolatedHtml);
         //string serializedAnswersDct = JsonSerializer.Serialize(answers);
         //result.Add("Answers", serializedAnswersDct);
 

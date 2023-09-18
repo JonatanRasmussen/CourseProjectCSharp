@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace CourseProject;
@@ -6,7 +7,8 @@ namespace CourseProject;
 public static class PatternMatcher
 {
 
-    public static readonly string PatternNotFound = "Info not available";
+    public static readonly string PatternNotFound = "Data not available";
+    public static readonly int FailedNumericConversion = -1;
 
     public static string Get(string pattern, string html, int groupIndex)
     {
@@ -22,27 +24,34 @@ public static class PatternMatcher
         }
     }
 
-    public static Dictionary<string, string> GetMultiple(string pattern, string html)
+    public static Dictionary<string, string> GetDict(string pattern, string html)
     {
-        Dictionary<string, string> dct = new();
+        Dictionary<string, string> results = new();
         Regex regex = new Regex(pattern, RegexOptions.Singleline);
         MatchCollection matchCollection = regex.Matches(html);
 
         foreach (Match match in matchCollection)
         {
+            string option = match.Groups[1].Value;
+            string optionCount = match.Groups[2].Value;
+            results.Add(option, optionCount);
+        }
+        return results;
+    }
+
+    public static List<string> GetList(string pattern, string html, int groupIndex)
+    {
+        List<string> results = new List<string>();
+        Regex regex = new Regex(pattern, RegexOptions.Singleline);
+        MatchCollection matches = regex.Matches(html);
+        foreach (Match match in matches)
+        {
             if (match.Success)
             {
-                string option = match.Groups[1].Value;
-                string optionCount = match.Groups[2].Value;
-                dct.Add(option, optionCount);
-            }
-            else
-            {
-                dct.Add(PatternNotFound, PatternNotFound);
-                break;
+                results.Add(match.Groups[groupIndex].Value.Trim());
             }
         }
-        return dct;
+        return results.Count > 0 ? results : new List<string> { PatternNotFound };
     }
 
     public static string TrimHtmlAndGet(string pattern, string html, int groupIndex)
@@ -80,5 +89,18 @@ public static class PatternMatcher
     public static string RemoveMultiSpaces(string input)
     {
         return Regex.Replace(input, " {2,}", "");
+    }
+
+    public static int ConvertToInt(string input)
+    {
+        try
+        {
+            return Convert.ToInt32(input);
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine($"ParseError, string -> int conversion failed for {input}");
+            return FailedNumericConversion;
+        }
     }
 }

@@ -67,6 +67,7 @@ namespace CourseProject
         {
             string websiteKey = "Point( ECTS )";
             string name = websiteKey;
+            websiteKey = PatternMatcher.EscapeSpecialCharacters(websiteKey);
             string value = ParseInfofromMainTable(websiteKey);
             return new DataPoint<string>(name, value);
         }
