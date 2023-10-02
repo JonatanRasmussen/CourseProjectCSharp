@@ -2,7 +2,7 @@
 
 namespace CourseProject;
 
-public class EvaluationPage
+public class EvalPage
 {
     public string ID { get; }
     public string Name { get; }
@@ -11,10 +11,10 @@ public class EvaluationPage
     public int DidRespond { get; }
     public int ShouldNotRespond { get; }
     public string LastUpdated { get; }
-    public List<Evaluation> EvaluationList { get; }
-    public int EvaluationWebsiteUrlNumber { get; }
+    public List<Eval> EvalList { get; }
+    public int EvalWebsiteUrlNumber { get; }
 
-    public EvaluationPage(IEvaluationFetcher dataFetcher)
+    public EvalPage(IEvalFetcher dataFetcher)
     {
         ID = dataFetcher.ID;
         Name = dataFetcher.Name;
@@ -23,7 +23,7 @@ public class EvaluationPage
         DidRespond = dataFetcher.DidRespond;
         ShouldNotRespond = dataFetcher.ShouldNotRespond;
         LastUpdated = dataFetcher.LastUpdated;
-        EvaluationList = dataFetcher.EvaluationList;
-        EvaluationWebsiteUrlNumber = dataFetcher.EvaluationWebsiteUrlNumber;
+        EvalList = dataFetcher.EvalList;
+        EvalWebsiteUrlNumber = dataFetcher.EvalWebsiteUrlNumber;
     }
 }

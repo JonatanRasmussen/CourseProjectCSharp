@@ -2,7 +2,7 @@
 
 namespace CourseProject;
 
-public interface IEvaluationFetcher
+public interface IEvalFetcher
 {
     string ID { get; }
     string Name { get; }
@@ -11,11 +11,11 @@ public interface IEvaluationFetcher
     int DidRespond { get; }
     int ShouldNotRespond { get; }
     string LastUpdated { get; }
-    List<Evaluation> EvaluationList { get; }
-    int EvaluationWebsiteUrlNumber { get; }
+    List<Eval> EvalList { get; }
+    int EvalWebsiteUrlNumber { get; }
 }
 
-public class EvaluationFetcher : IEvaluationFetcher
+public class EvalFetcher : IEvalFetcher
 {
     private string PageSource { get; }
     public string ID { get; }
@@ -25,10 +25,10 @@ public class EvaluationFetcher : IEvaluationFetcher
     public int DidRespond { get; }
     public int ShouldNotRespond { get; }
     public string LastUpdated { get; }
-    public List<Evaluation> EvaluationList { get; }
-    public int EvaluationWebsiteUrlNumber { get; }
+    public List<Eval> EvalList { get; }
+    public int EvalWebsiteUrlNumber { get; }
 
-    public EvaluationFetcher()
+    public EvalFetcher()
     {
         PageSource = HtmlFetcher.Get();
         ID = ParseID();
@@ -38,31 +38,31 @@ public class EvaluationFetcher : IEvaluationFetcher
         DidRespond = ParseDidRespond();
         ShouldNotRespond = ParseShouldNotRespond();
         LastUpdated = ParseLastUpdated();
-        EvaluationList = ParseEvaluationList();
-        EvaluationWebsiteUrlNumber = 0;
+        EvalList = ParseEvalList();
+        EvalWebsiteUrlNumber = 0;
     }
 
-    public static readonly Dictionary<Evaluation.EvaluationType, string> DtuWebsiteEvaluationNames = new()
+    public static readonly Dictionary<Eval.EvalType, string> DtuWebsiteEvalNames = new()
     {
-        { Evaluation.EvaluationType.LearnedMuch, "1.1" },
-        { Evaluation.EvaluationType.LearningObjectives, "1.2" },
-        { Evaluation.EvaluationType.MotivatingActivities, "1.3" },
-        { Evaluation.EvaluationType.OppertunityForFeedback, "1.4" },
-        { Evaluation.EvaluationType.ClearExpectations, "1.5" },
-        { Evaluation.EvaluationType.TimeSpentOnCourse, "2.1" },
+        { Eval.EvalType.LearnedMuch, "1.1" },
+        { Eval.EvalType.LearningObjectives, "1.2" },
+        { Eval.EvalType.MotivatingActivities, "1.3" },
+        { Eval.EvalType.OppertunityForFeedback, "1.4" },
+        { Eval.EvalType.ClearExpectations, "1.5" },
+        { Eval.EvalType.TimeSpentOnCourse, "2.1" },
     };
 
-    public static readonly Dictionary<LegacyEvaluation.LegacyEvaluationType, string> DtuWebsiteLegacyEvaluationNames = new()
+    public static readonly Dictionary<LegacyEval.LegacyEvalType, string> DtuWebsiteLegacyEvalNames = new()
     {
-        { LegacyEvaluation.LegacyEvaluationType.LearnedMuch, "1" },
-        { LegacyEvaluation.LegacyEvaluationType.EncouragedToParticipate, "2" },
-        { LegacyEvaluation.LegacyEvaluationType.MotivatingActivities, "3" },
-        { LegacyEvaluation.LegacyEvaluationType.OppertunityForFeedback, "4" },
-        { LegacyEvaluation.LegacyEvaluationType.ActivityContinuity, "5" },
-        { LegacyEvaluation.LegacyEvaluationType.TimeSpentOnCourse, "6" },
-        { LegacyEvaluation.LegacyEvaluationType.PrerequisiteLevel, "7" },
-        { LegacyEvaluation.LegacyEvaluationType.GenerallyGoodCourse, "8" },
-        { LegacyEvaluation.LegacyEvaluationType.PromptedToEvaluate, "9" },
+        { LegacyEval.LegacyEvalType.LearnedMuch, "1" },
+        { LegacyEval.LegacyEvalType.EncouragedToParticipate, "2" },
+        { LegacyEval.LegacyEvalType.MotivatingActivities, "3" },
+        { LegacyEval.LegacyEvalType.OppertunityForFeedback, "4" },
+        { LegacyEval.LegacyEvalType.ActivityContinuity, "5" },
+        { LegacyEval.LegacyEvalType.TimeSpentOnCourse, "6" },
+        { LegacyEval.LegacyEvalType.PrerequisiteLevel, "7" },
+        { LegacyEval.LegacyEvalType.GenerallyGoodCourse, "8" },
+        { LegacyEval.LegacyEvalType.PromptedToEvaluate, "9" },
     };
 
     private string ParseID()
@@ -134,32 +134,32 @@ public class EvaluationFetcher : IEvaluationFetcher
         return PatternMatcher.Get(pattern, PageSource, 1);
     }
 
-    private List<Evaluation> ParseEvaluationList()
+    private List<Eval> ParseEvalList()
     {
-        List<Evaluation> evaluationList = new();
-        foreach (var evaluationType in DtuWebsiteEvaluationNames)
+        List<Eval> evalList = new();
+        foreach (var evalType in DtuWebsiteEvalNames)
         {
-            Evaluation evaluation = Evaluation.CreateEvaluation(evaluationType.Key);
-            evaluation.Responses = ParseQuestion(evaluationType.Value);
-            evaluationList.Add(evaluation);
+            Eval eval = Eval.CreateEval(evalType.Key);
+            eval.Responses = ParseQuestion(evalType.Value);
+            evalList.Add(eval);
         }
-        if (evaluationList.Count == 0)
+        if (evalList.Count == 0)
         {
-            return ParseLegacyEvaluationList();
+            return ParseLegacyEvalList();
         }
-        return evaluationList;
+        return evalList;
     }
 
-    private List<Evaluation> ParseLegacyEvaluationList()
+    private List<Eval> ParseLegacyEvalList()
     {
-        List<Evaluation> evaluationList = new();
-        foreach (var evaluationType in DtuWebsiteLegacyEvaluationNames)
+        List<Eval> evalList = new();
+        foreach (var evalType in DtuWebsiteLegacyEvalNames)
         {
-            Evaluation evaluation = LegacyEvaluation.CreateEvaluation(evaluationType.Key);
-            evaluation.Responses = ParseQuestion(evaluationType.Value);
-            evaluationList.Add(evaluation);
+            Eval eval = LegacyEval.CreateEval(evalType.Key);
+            eval.Responses = ParseQuestion(evalType.Value);
+            evalList.Add(eval);
         }
-        return evaluationList;
+        return evalList;
     }
 
     private Dictionary<string, int> ParseQuestion(string questionIndex)
@@ -194,7 +194,7 @@ public class EvaluationFetcher : IEvaluationFetcher
             string key = kvp.Key;
             if (key.Length == 0)
             {
-                key = FixLegacyEvaluationAnswers(count, mostRecentKey);
+                key = FixLegacyEvalAnswers(count, mostRecentKey);
             }
             else
             {
@@ -205,7 +205,7 @@ public class EvaluationFetcher : IEvaluationFetcher
         }
     }
 
-    private static string FixLegacyEvaluationAnswers(int iteration, string firstKey)
+    private static string FixLegacyEvalAnswers(int iteration, string firstKey)
     // In evaluations from F2019 and earlier, response option 2, 3 and 4 is blank
     {
         if (iteration == 2)
