@@ -28,9 +28,9 @@ public class EvalFetcher : IEvalFetcher
     public List<Eval> EvalList { get; }
     public int EvalWebsiteUrlNumber { get; }
 
-    public EvalFetcher()
+    public EvalFetcher(string html)
     {
-        PageSource = HtmlFetcher.Get();
+        PageSource = html;
         ID = ParseID();
         Name = ParseName();
         Term = ParseTerm();

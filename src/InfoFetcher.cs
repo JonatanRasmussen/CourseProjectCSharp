@@ -24,9 +24,9 @@ public class InfoFetcher : IInfoFetcher
     public Dictionary<string,string> InfoTableContent { get; }
     public string LastUpdated { get; }
 
-    public InfoFetcher()
+    public InfoFetcher(string html)
     {
-        PageSource = HtmlFetcher.Get();
+        PageSource = html;
         ID = ParseCourseIdInfo();
         Name = ParseCourseNameInfo();
         Year = ParseYearInfo();
