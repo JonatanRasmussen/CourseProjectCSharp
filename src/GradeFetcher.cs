@@ -23,9 +23,9 @@ public class GradeFetcher : IGradeFetcher
     public string LastUpdated { get; }
     public List<Grade> GradeList { get; }
 
-    public GradeFetcher()
+    public GradeFetcher(string html)
     {
-        PageSource = HtmlFetcher.Get();
+        PageSource = html;
         ID = ParseID();
         Name = ParseName();
         ExamPeriod = ParseExamPeriod();

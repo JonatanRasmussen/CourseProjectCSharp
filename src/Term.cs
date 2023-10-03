@@ -11,3 +11,13 @@ public class Term
         Name = "test";
     }
 }
+
+public class AcademicYear
+{
+    public string Name { get; set; }
+
+    public AcademicYear()
+    {
+        Name = "test";
+    }
+}
