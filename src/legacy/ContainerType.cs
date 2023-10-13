@@ -4,10 +4,10 @@ namespace CourseProject;
 
 public abstract class ContainerType
 {
-    public Domain Domain { get; }
+    public LegacyDomain Domain { get; }
     public abstract string ClassName { get; }
     public abstract List<Type> PrimaryChildTypes { get; }
-    public ContainerType(Domain domain)
+    public ContainerType(LegacyDomain domain)
     {
         Domain = domain;
     }
@@ -15,7 +15,7 @@ public abstract class ContainerType
 
 public class School : ContainerType
 {
-    public School(Domain domain) : base(domain)
+    public School(LegacyDomain domain) : base(domain)
     {
     }
 
@@ -26,7 +26,7 @@ public class School : ContainerType
 
 public class Year : ContainerType
 {
-    public Year(Domain domain) : base(domain)
+    public Year(LegacyDomain domain) : base(domain)
     {
     }
 
@@ -37,7 +37,7 @@ public class Year : ContainerType
 
 public class StudyLine : ContainerType
 {
-    public StudyLine(Domain domain) : base(domain)
+    public StudyLine(LegacyDomain domain) : base(domain)
     {
     }
 

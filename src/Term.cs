@@ -2,21 +2,21 @@
 
 namespace CourseProject;
 
-public class Term
+public class AnotherLegacyTerm
 {
     public string Name { get; set; }
 
-    public Term()
+    public AnotherLegacyTerm()
     {
         Name = "test";
     }
 }
 
-public class AcademicYear
+public class LegacyAcademicYear
 {
     public string Name { get; set; }
 
-    public AcademicYear()
+    public LegacyAcademicYear()
     {
         Name = "test";
     }

@@ -8,8 +8,8 @@ public class Registry
     public Dictionary<string, EvalPage> EvalPages { get; set; }
     public Dictionary<string, GradePage> GradePages { get; set; }
     public Dictionary<string, InfoPage> InfoPages { get; set; }
-    public Dictionary<string, Term> Terms { get; set; }
-    public Dictionary<string, AcademicYear> Years { get; set; }
+    public Dictionary<string, AnotherLegacyTerm> Terms { get; set; }
+    public Dictionary<string, LegacyAcademicYear> Years { get; set; }
 
     public Registry()
     {
@@ -29,7 +29,7 @@ public class Registry
 
     private void FillEvalRegistry()
     {
-        foreach (Term term in Terms.Values)
+        foreach (AnotherLegacyTerm term in Terms.Values)
         {
             Dictionary<string,string> pageSources = Persistence.ScrapedEvals(term);
             foreach (string html in pageSources.Values)
@@ -43,7 +43,7 @@ public class Registry
 
     private void FillGradeRegistry()
     {
-        foreach (Term term in Terms.Values)
+        foreach (AnotherLegacyTerm term in Terms.Values)
         {
             Dictionary<string,string> pageSources = Persistence.ScrapedGrades(term);
             foreach (string html in pageSources.Values)
@@ -57,7 +57,7 @@ public class Registry
 
     private void FillInfoRegistry()
     {
-        foreach (AcademicYear year in Years.Values)
+        foreach (LegacyAcademicYear year in Years.Values)
         {
             Dictionary<string,string> pageSources = Persistence.ScrapedInfo(year);
             foreach (string html in pageSources.Values)

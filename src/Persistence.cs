@@ -7,19 +7,19 @@ public static class Persistence
     private static readonly string ScrapedHtmlFolder = "todo/todo/";
 
 
-    public static Dictionary<string,string> ScrapedEvals(Term term)
+    public static Dictionary<string,string> ScrapedEvals(AnotherLegacyTerm term)
     {
         string filePath = $"{ScrapedHtmlFolder}{EvalFileName(term)}";
         return ReadJson(filePath);
     }
 
-    public static Dictionary<string,string> ScrapedGrades(Term term)
+    public static Dictionary<string,string> ScrapedGrades(AnotherLegacyTerm term)
     {
         string filePath = $"{ScrapedHtmlFolder}{GradeFileName(term)}";
         return ReadJson(filePath);
     }
 
-    public static Dictionary<string,string> ScrapedInfo(AcademicYear year)
+    public static Dictionary<string,string> ScrapedInfo(LegacyAcademicYear year)
     {
         string filePath = $"{ScrapedHtmlFolder}{InfoFileName(year)}";
         return ReadJson(filePath);
@@ -50,17 +50,17 @@ public static class Persistence
         }
     }
 
-    private static string EvalFileName(Term term)
+    private static string EvalFileName(AnotherLegacyTerm term)
     {
         return $"{term.Name}__evals.json";
     }
 
-    private static string GradeFileName(Term term)
+    private static string GradeFileName(AnotherLegacyTerm term)
     {
         return $"{term.Name}__grades.json";
     }
 
-    private static string InfoFileName(AcademicYear year)
+    private static string InfoFileName(LegacyAcademicYear year)
     {
         return $"{year.Name}__info.json";
     }

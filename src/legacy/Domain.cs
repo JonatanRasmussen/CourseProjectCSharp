@@ -2,11 +2,11 @@
 
 namespace CourseProject;
 
-public class Domain
+public class LegacyDomain
 {
     public string Name { get; }
 
-    public Domain(string name)
+    public LegacyDomain(string name)
     {
         Name = name;
     }

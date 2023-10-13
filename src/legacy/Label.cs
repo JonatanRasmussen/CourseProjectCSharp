@@ -4,10 +4,10 @@ namespace CourseProject;
 
 public abstract class Label
 {
-    public Domain Domain { get; }
+    public LegacyDomain Domain { get; }
     public string Name { get; }
 
-    public Label(Domain domain)
+    public Label(LegacyDomain domain)
     {
         Domain = domain;
         Name = GenerateName();
