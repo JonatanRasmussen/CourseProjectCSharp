@@ -8,7 +8,7 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\BudoB\\.nuget\\packages\\": {}
+    "C:\\Users\\budob_5mcwy7q\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -16,11 +16,11 @@
       "projectUniqueName": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
       "projectName": "CourseProjectCSharp",
       "projectPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
-      "packagesPath": "C:\\Users\\BudoB\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\budob_5mcwy7q\\.nuget\\packages\\",
       "outputPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\BudoB\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\budob_5mcwy7q\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -59,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }

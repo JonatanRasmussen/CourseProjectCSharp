@@ -2,18 +2,7 @@
 
 namespace CourseProject;
 
-public interface IGradeFetcher
-{
-    string ID { get; }
-    string Name { get; }
-    string ExamPeriod { get; }
-    List<string> OtherVersions { get; }
-
-    string LastUpdated { get; }
-    List<Grade> GradeList { get; }
-}
-
-public class GradeFetcher : IGradeFetcher
+public class GradeParser : IGradeParser
 {
     private string PageSource { get; }
     public string ID { get; }
@@ -23,7 +12,7 @@ public class GradeFetcher : IGradeFetcher
     public string LastUpdated { get; }
     public List<Grade> GradeList { get; }
 
-    public GradeFetcher(string html)
+    public GradeParser(string html)
     {
         PageSource = html;
         ID = ParseID();
@@ -56,7 +45,7 @@ public class GradeFetcher : IGradeFetcher
         string middle = "([a-zA-Z0-9]{5})";
         string end = " .*?</h2>";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseName()
@@ -65,7 +54,7 @@ public class GradeFetcher : IGradeFetcher
         string middle = "(.*?),";
         string end = " .*?</h2>";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseExamPeriod()
@@ -75,7 +64,7 @@ public class GradeFetcher : IGradeFetcher
         string end = "</h2>";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private List<string> ParseOtherVersions()
@@ -84,7 +73,7 @@ public class GradeFetcher : IGradeFetcher
         string middle = ">([sv]\\d{2})<";
         string end = "";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.GetList(pattern, PageSource, 1);
+        return ParserUtils.GetList(pattern, PageSource, 1);
     }
 
     private string ParseLastUpdated()
@@ -93,7 +82,7 @@ public class GradeFetcher : IGradeFetcher
         string middle = "\\s*&#32;den &#32;";
         string end = "(.*?)\\s*</div>";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private List<Grade> ParseGradeList()
@@ -114,7 +103,7 @@ public class GradeFetcher : IGradeFetcher
         string middle = "<td style=\"text-align: center\">\\s*";
         string end = "(\\d+)\\s*</td>";
         string pattern = $"{start}{middle}{end}";
-        string valueStr = PatternMatcher.Get(pattern, PageSource, 1);
-        return PatternMatcher.ConvertToInt(valueStr);
+        string valueStr = ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.ConvertToInt(valueStr);
     }
 }

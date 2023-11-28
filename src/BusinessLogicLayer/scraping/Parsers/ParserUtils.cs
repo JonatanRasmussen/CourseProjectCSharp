@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace CourseProject;
 
-public static class PatternMatcher
+public static class ParserUtils
 {
 
     public static readonly string PatternNotFound = "Data not available";

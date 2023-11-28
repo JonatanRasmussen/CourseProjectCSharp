@@ -34,7 +34,7 @@ public class Registry
             Dictionary<string,string> pageSources = Persistence.ScrapedEvals(term);
             foreach (string html in pageSources.Values)
             {
-                EvalFetcher evalFetcher = new(html);
+                EvalParser evalFetcher = new(html);
                 EvalPage evalPage = new(evalFetcher);
                 EvalPages.Add(term.Name, evalPage);
             }
@@ -48,7 +48,7 @@ public class Registry
             Dictionary<string,string> pageSources = Persistence.ScrapedGrades(term);
             foreach (string html in pageSources.Values)
             {
-                GradeFetcher gradeFetcher = new(html);
+                GradeParser gradeFetcher = new(html);
                 GradePage gradePage = new(gradeFetcher);
                 GradePages.Add(term.Name, gradePage);
             }
@@ -62,7 +62,7 @@ public class Registry
             Dictionary<string,string> pageSources = Persistence.ScrapedInfo(year);
             foreach (string html in pageSources.Values)
             {
-                InfoFetcher infoFetcher = new(html);
+                InfoParser infoFetcher = new(html);
                 InfoPage infoPage = new(infoFetcher);
                 InfoPages.Add(year.Name, infoPage);
             }

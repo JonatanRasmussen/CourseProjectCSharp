@@ -67,7 +67,7 @@ namespace CourseProject
         {
             string websiteKey = "Point( ECTS )";
             string name = websiteKey;
-            websiteKey = PatternMatcher.EscapeSpecialCharacters(websiteKey);
+            websiteKey = ParserUtils.EscapeSpecialCharacters(websiteKey);
             string value = ParseInfofromMainTable(websiteKey);
             return new DataPoint<string>(name, value);
         }
@@ -320,7 +320,7 @@ namespace CourseProject
             string end = "";
             string pattern = $"{start}{middle}{end}";
             int groupIndex = 1;
-            return PatternMatcher.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource, groupIndex);
         }
 
         public string ParseCourseNameInfo()
@@ -330,14 +330,14 @@ namespace CourseProject
             string end = "</h2></div>";
             string pattern = $"{start}{middle}{end}";
             int groupIndex = 1;
-            return PatternMatcher.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource, groupIndex);
         }
 
         private string ParseYearInfo()
         {
             string pattern = @"(\d{4}\/\d{4})";
             int groupIndex = 1;
-            return PatternMatcher.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource, groupIndex);
         }
 
         private string ParseAnnouncementInfo()
@@ -347,7 +347,7 @@ namespace CourseProject
             string end = "</div></div><div class=\"row\">";
             string pattern = $"{start}{middle}{end}";
             int groupIndex = 1;
-            return PatternMatcher.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource, groupIndex);
         }
 
         private string ParseStudyLinesInfo()
@@ -357,7 +357,7 @@ namespace CourseProject
             string end = ";var collectedTooltips = {};";
             string pattern = $"{start}{middle}{end}";
             int groupIndex = 1;
-            return PatternMatcher.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource, groupIndex);
         }
 
         private string ParseInfofromMainTable(string websiteKey)
@@ -367,8 +367,8 @@ namespace CourseProject
             string end = "</td></tr>";
             string pattern = $"{start}{middle}{end}";
             int groupIndex = 1;
-            string value = PatternMatcher.Get(pattern, PageSource, groupIndex);
-            if (value != PatternMatcher.PatternNotFound)
+            string value = ParserUtils.Get(pattern, PageSource, groupIndex);
+            if (value != ParserUtils.PatternNotFound)
             {
                 return value;
             }
@@ -379,7 +379,7 @@ namespace CourseProject
                 end = "\">";
                 pattern = $"{start}{middle}{end}";
                 groupIndex = 1;
-                return PatternMatcher.Get(pattern, PageSource, groupIndex);
+                return ParserUtils.Get(pattern, PageSource, groupIndex);
             }
         }
 
@@ -390,7 +390,7 @@ namespace CourseProject
             string end = "<div class=\"bar\">";
             string pattern = $"{start}{middle}{end}";
             int groupIndex = 1;
-            return PatternMatcher.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource, groupIndex);
         }
 
         private string ParseLastUpdatedInfo(string websiteKey)
@@ -400,7 +400,7 @@ namespace CourseProject
             string end = "</div></div></div>";
             string pattern = $"{start}{middle}{end}";
             int groupIndex = 1;
-            return PatternMatcher.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource, groupIndex);
         }
     }
 }

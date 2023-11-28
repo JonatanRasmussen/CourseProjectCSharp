@@ -2,18 +2,7 @@
 
 namespace CourseProject;
 
-public interface IInfoFetcher
-{
-    string ID { get; }
-    string Name { get; }
-    string Year { get; }
-    string Announcement { get; }
-    string StudyLines { get; }
-    Dictionary<string,string> InfoTableContent { get; }
-    string LastUpdated { get; }
-}
-
-public class InfoFetcher : IInfoFetcher
+public class InfoParser : IInfoParser
 {
     private string PageSource { get; }
     public string ID { get; }
@@ -24,7 +13,7 @@ public class InfoFetcher : IInfoFetcher
     public Dictionary<string,string> InfoTableContent { get; }
     public string LastUpdated { get; }
 
-    public InfoFetcher(string html)
+    public InfoParser(string html)
     {
         PageSource = html;
         ID = ParseCourseIdInfo();
@@ -100,8 +89,8 @@ public class InfoFetcher : IInfoFetcher
         string end = "</td></tr>";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        string value = PatternMatcher.Get(pattern, PageSource, groupIndex);
-        if (value != PatternMatcher.PatternNotFound)
+        string value = ParserUtils.Get(pattern, PageSource, groupIndex);
+        if (value != ParserUtils.PatternNotFound)
         {
             return value;
         }
@@ -112,7 +101,7 @@ public class InfoFetcher : IInfoFetcher
             end = "\">";
             pattern = $"{start}{middle}{end}";
             groupIndex = 1;
-            return PatternMatcher.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource, groupIndex);
         }
     }
 
@@ -123,7 +112,7 @@ public class InfoFetcher : IInfoFetcher
         string end = "<div class=\"bar\">";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.Get(pattern, PageSource, groupIndex);
+        return ParserUtils.Get(pattern, PageSource, groupIndex);
     }
 
     public string ParseLastUpdatedInfo()
@@ -134,7 +123,7 @@ public class InfoFetcher : IInfoFetcher
         string end = "</div></div></div>";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.Get(pattern, PageSource, groupIndex);
+        return ParserUtils.Get(pattern, PageSource, groupIndex);
     }
 
     public string ParseCourseIdInfo()
@@ -144,7 +133,7 @@ public class InfoFetcher : IInfoFetcher
         string end = "";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.TrimHtmlAndGet(pattern, PageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, PageSource, groupIndex);
     }
 
     public string ParseCourseNameInfo()
@@ -154,14 +143,14 @@ public class InfoFetcher : IInfoFetcher
         string end = "</h2></div>";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.TrimHtmlAndGet(pattern, PageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, PageSource, groupIndex);
     }
 
     public string ParseYearInfo()
     {
         string pattern = @"(\d{4}\/\d{4})";
         int groupIndex = 1;
-        return PatternMatcher.Get(pattern, PageSource, groupIndex);
+        return ParserUtils.Get(pattern, PageSource, groupIndex);
     }
 
     public string ParseAnnouncementInfo()
@@ -171,7 +160,7 @@ public class InfoFetcher : IInfoFetcher
         string end = "</div></div><div class=\"row\">";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.TrimHtmlAndGet(pattern, PageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, PageSource, groupIndex);
     }
 
     public string ParseStudyLinesInfo()
@@ -181,6 +170,6 @@ public class InfoFetcher : IInfoFetcher
         string end = ";var collectedTooltips = {};";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.TrimHtmlAndGet(pattern, PageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, PageSource, groupIndex);
     }
 }

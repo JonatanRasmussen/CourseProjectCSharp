@@ -2,20 +2,7 @@
 
 namespace CourseProject;
 
-public interface IEvalFetcher
-{
-    string ID { get; }
-    string Name { get; }
-    string Term { get; }
-    int CouldRespond { get; }
-    int DidRespond { get; }
-    int ShouldNotRespond { get; }
-    string LastUpdated { get; }
-    List<Eval> EvalList { get; }
-    int EvalWebsiteUrlNumber { get; }
-}
-
-public class EvalFetcher : IEvalFetcher
+public class EvalParser : IEvalParser
 {
     private string PageSource { get; }
     public string ID { get; }
@@ -28,7 +15,7 @@ public class EvalFetcher : IEvalFetcher
     public List<Eval> EvalList { get; }
     public int EvalWebsiteUrlNumber { get; }
 
-    public EvalFetcher(string html)
+    public EvalParser(string html)
     {
         PageSource = html;
         ID = ParseID();
@@ -39,7 +26,7 @@ public class EvalFetcher : IEvalFetcher
         ShouldNotRespond = ParseShouldNotRespond();
         LastUpdated = ParseLastUpdated();
         EvalList = ParseEvalList();
-        EvalWebsiteUrlNumber = 0;
+        EvalWebsiteUrlNumber = -1;
     }
 
     public static readonly Dictionary<Eval.EvalType, string> DtuWebsiteEvalNames = new()
@@ -72,7 +59,7 @@ public class EvalFetcher : IEvalFetcher
         string end = " .*";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseName()
@@ -82,7 +69,7 @@ public class EvalFetcher : IEvalFetcher
         string end = "[A-Z]\\d{2}";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseTerm()
@@ -92,7 +79,7 @@ public class EvalFetcher : IEvalFetcher
         string end = "";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private int ParseCouldRespond()
@@ -101,8 +88,8 @@ public class EvalFetcher : IEvalFetcher
         string middle = "(\\d+)";
         string end = " - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        string valueStr = PatternMatcher.Get(pattern, PageSource, 1);
-        return PatternMatcher.ConvertToInt(valueStr);
+        string valueStr = ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.ConvertToInt(valueStr);
     }
 
     private int ParseDidRespond()
@@ -111,8 +98,8 @@ public class EvalFetcher : IEvalFetcher
         string middle = "(\\d+)";
         string end = " / \\(\\d+ - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        string valueStr = PatternMatcher.Get(pattern, PageSource, 1);
-        return PatternMatcher.ConvertToInt(valueStr);
+        string valueStr = ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.ConvertToInt(valueStr);
     }
 
     private int ParseShouldNotRespond()
@@ -121,8 +108,8 @@ public class EvalFetcher : IEvalFetcher
         string middle = "(\\d+)";
         string end = "\\)";
         string pattern = $"{start}{middle}{end}";
-        string valueStr = PatternMatcher.Get(pattern, PageSource, 1);
-        return PatternMatcher.ConvertToInt(valueStr);
+        string valueStr = ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.ConvertToInt(valueStr);
     }
 
     private string ParseLastUpdated()
@@ -131,7 +118,7 @@ public class EvalFetcher : IEvalFetcher
         string middle = "(\\d+\\.\\s+\\w+\\s+\\d+)";
         string end = "";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private List<Eval> ParseEvalList()
@@ -176,7 +163,7 @@ public class EvalFetcher : IEvalFetcher
         string middle = "(.*?)";
         string end = "<div class=\"CourseSchemaResultFooter grid_6 clearmarg \">";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html, 1);
     }
 
     private static void AddOptionsToDict(Dictionary<string, int> result, string slicedHtml)
@@ -185,7 +172,7 @@ public class EvalFetcher : IEvalFetcher
         string middle = "(.*?)";
         string end = "</div>.*?<span>(\\d+)</span>";
         string pattern = $"{start}{middle}{end}";
-        Dictionary<string, string> answers = PatternMatcher.GetDict(pattern, slicedHtml);
+        Dictionary<string, string> answers = ParserUtils.GetDict(pattern, slicedHtml);
         string mostRecentKey = "";
         int count = 0;
         foreach (var kvp in answers)
@@ -200,7 +187,7 @@ public class EvalFetcher : IEvalFetcher
             {
                 mostRecentKey = key;
             }
-            int value = PatternMatcher.ConvertToInt(kvp.Value);
+            int value = ParserUtils.ConvertToInt(kvp.Value);
             result.Add(key, value);
         }
     }
@@ -243,6 +230,6 @@ public class EvalFetcher : IEvalFetcher
             }
         }
         Console.WriteLine("Warning: Unknown evaluation response key");
-        return $"{PatternMatcher.PatternNotFound}{iteration}";
+        return $"{ParserUtils.PatternNotFound}{iteration}";
     }
 }

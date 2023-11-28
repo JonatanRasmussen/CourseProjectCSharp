@@ -2,7 +2,7 @@
 
 namespace CourseProject;
 
-public class Course
+public class InfoDefaults : IInfoParser
 {
     public string ID { get; }
     public string Name { get; }
@@ -12,8 +12,14 @@ public class Course
     public Dictionary<string,string> InfoTableContent { get; }
     public string LastUpdated { get; }
 
-    public Course()
+    public InfoDefaults()
     {
-
+        ID = string.Empty;
+        Name = string.Empty;
+        Year = string.Empty;
+        Announcement = string.Empty;
+        StudyLines = string.Empty;
+        InfoTableContent = new();
+        LastUpdated = string.Empty;
     }
 }

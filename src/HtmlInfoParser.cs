@@ -20,7 +20,7 @@ public static class HtmlInfoParser
     public static string ParseDataPoint(string pageSource, InfoDataPoint dataPoint)
     {
         string websiteKey = DtuWebsiteInfoKeysEnglish[dataPoint];
-        string escapedWebsiteKey = PatternMatcher.EscapeSpecialCharacters(websiteKey);
+        string escapedWebsiteKey = ParserUtils.EscapeSpecialCharacters(websiteKey);
         Func<string, string, string> ParserMethod = ParserMethodMap[dataPoint];
         return ParserMethod(escapedWebsiteKey, pageSource);
     }
@@ -32,8 +32,8 @@ public static class HtmlInfoParser
         string end = "</td></tr>";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        string value = PatternMatcher.Get(pattern, pageSource, groupIndex);
-        if (value != PatternMatcher.PatternNotFound)
+        string value = ParserUtils.Get(pattern, pageSource, groupIndex);
+        if (value != ParserUtils.PatternNotFound)
         {
             return value;
         }
@@ -44,7 +44,7 @@ public static class HtmlInfoParser
             end = "\">";
             pattern = $"{start}{middle}{end}";
             groupIndex = 1;
-            return PatternMatcher.Get(pattern, pageSource, groupIndex);
+            return ParserUtils.Get(pattern, pageSource, groupIndex);
         }
     }
 
@@ -55,7 +55,7 @@ public static class HtmlInfoParser
         string end = "<div class=\"bar\">";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.Get(pattern, pageSource, groupIndex);
+        return ParserUtils.Get(pattern, pageSource, groupIndex);
     }
 
     public static string ParseLastUpdatedInfo(string websiteKey, string pageSource)
@@ -65,7 +65,7 @@ public static class HtmlInfoParser
         string end = "</div></div></div>";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.Get(pattern, pageSource, groupIndex);
+        return ParserUtils.Get(pattern, pageSource, groupIndex);
     }
 
     public static string ParseCourseIdInfo(string websiteKey, string pageSource)
@@ -75,7 +75,7 @@ public static class HtmlInfoParser
         string end = "";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.TrimHtmlAndGet(pattern, pageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, pageSource, groupIndex);
     }
 
     public static string ParseCourseNameInfo(string websiteKey, string pageSource)
@@ -85,14 +85,14 @@ public static class HtmlInfoParser
         string end = "</h2></div>";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.TrimHtmlAndGet(pattern, pageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, pageSource, groupIndex);
     }
 
     public static string ParseYearInfo(string websiteKey, string pageSource)
     {
         string pattern = @"(\d{4}\/\d{4})";
         int groupIndex = 1;
-        return PatternMatcher.Get(pattern, pageSource, groupIndex);
+        return ParserUtils.Get(pattern, pageSource, groupIndex);
     }
 
     public static string ParseAnnouncementInfo(string websiteKey, string pageSource)
@@ -102,7 +102,7 @@ public static class HtmlInfoParser
         string end = "</div></div><div class=\"row\">";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.TrimHtmlAndGet(pattern, pageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, pageSource, groupIndex);
     }
 
     public static string ParseStudyLinesInfo(string websiteKey, string pageSource)
@@ -112,7 +112,7 @@ public static class HtmlInfoParser
         string end = ";var collectedTooltips = {};";
         string pattern = $"{start}{middle}{end}";
         int groupIndex = 1;
-        return PatternMatcher.TrimHtmlAndGet(pattern, pageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, pageSource, groupIndex);
     }
 
     public static readonly Dictionary<InfoDataPoint, Func<string, string, string>> ParserMethodMap = new()

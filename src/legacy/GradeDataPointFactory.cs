@@ -98,7 +98,7 @@ public class GradeDataPointFactory
         string middle = "<td style=\"text-align: center\">\\s*";
         string end = "(\\d+)\\s*</td>";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
 
@@ -109,7 +109,7 @@ public class GradeDataPointFactory
         string end = " .*?</h2>";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseAltCourseName()
@@ -119,7 +119,7 @@ public class GradeDataPointFactory
         string end = " .*?</h2>";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseExamPeriod()
@@ -129,7 +129,7 @@ public class GradeDataPointFactory
         string end = "</h2>";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
 
@@ -140,7 +140,7 @@ public class GradeDataPointFactory
         string end = "";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseFremmoedte()
@@ -150,7 +150,7 @@ public class GradeDataPointFactory
         string end = "";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseAntalBestaaet()
@@ -160,7 +160,7 @@ public class GradeDataPointFactory
         string end = "";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseAndreVersioner()
@@ -178,7 +178,7 @@ public class GradeDataPointFactory
         string middle = "\\s*&#32;den &#32;";
         string end = "(.*?)\\s*</div>";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 }
 

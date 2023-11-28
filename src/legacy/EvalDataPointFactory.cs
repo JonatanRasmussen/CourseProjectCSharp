@@ -105,7 +105,7 @@ public class EvalDataPointFactory
         string end = " .*";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseCourseName()
@@ -115,7 +115,7 @@ public class EvalDataPointFactory
         string end = "[A-Z]\\d{2}";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseTerm()
@@ -125,7 +125,7 @@ public class EvalDataPointFactory
         string end = "";
         string pattern = $"{start}{middle}{end}";
 
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseCouldRespond()
@@ -134,7 +134,7 @@ public class EvalDataPointFactory
         string middle = "(\\d+)";
         string end = " - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseDidRespond()
@@ -143,7 +143,7 @@ public class EvalDataPointFactory
         string middle = "(\\d+)";
         string end = " / \\(\\d+ - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseShouldNotRespond()
@@ -152,7 +152,7 @@ public class EvalDataPointFactory
         string middle = "(\\d+)";
         string end = "\\)";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource, 1);
     }
 
     private string ParseQuestion(string questionIndex)
@@ -160,7 +160,7 @@ public class EvalDataPointFactory
         Dictionary<string, string> result = new();
 
         string isolatedHtml = IsolateQuestionSection(questionIndex, PageSource);
-        result.Add("Index", PatternMatcher.RemoveEscapeCharacters(questionIndex));
+        result.Add("Index", ParserUtils.RemoveEscapeCharacters(questionIndex));
         //AddQuestionTextToDict(result, isolatedHtml);
         AddOptionsToDict(result, isolatedHtml);
         AddTotalResponsesToDict(result, PageSource);
@@ -174,7 +174,7 @@ public class EvalDataPointFactory
         string middle = "(.*?)";
         string end = "<div class=\"CourseSchemaResultFooter grid_6 clearmarg \">";
         string pattern = $"{start}{middle}{end}";
-        return PatternMatcher.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html, 1);
     }
 
     private static void AddQuestionTextToDict(Dictionary<string, string> result, string isolatedHtml)
@@ -183,9 +183,9 @@ public class EvalDataPointFactory
         string middle = "(.*?)";
         string end = "</div>";
         string pattern = $"{start}{middle}{end}";
-        string questionText = PatternMatcher.Get(pattern, isolatedHtml, 1);
+        string questionText = ParserUtils.Get(pattern, isolatedHtml, 1);
         questionText = System.Net.WebUtility.HtmlDecode(questionText);
-        questionText = PatternMatcher.RemoveNewlines(questionText);
+        questionText = ParserUtils.RemoveNewlines(questionText);
         result.Add("Q", questionText);
     }
 
@@ -195,7 +195,7 @@ public class EvalDataPointFactory
         string middle = "(.*?)";
         string end = "</div>.*?<span>(\\d+)</span>";
         string pattern = $"{start}{middle}{end}";
-        Dictionary<string, string> answers = PatternMatcher.GetDict(pattern, isolatedHtml);
+        Dictionary<string, string> answers = ParserUtils.GetDict(pattern, isolatedHtml);
 
         foreach (var kvp in answers)
         {
@@ -216,7 +216,7 @@ public class EvalDataPointFactory
         string middle = "(\\d+)";
         string end = " besvarelser</span>";
         string pattern = $"{start}{middle}{end}";
-        string totalResponses = PatternMatcher.Get(pattern, html, 1);
+        string totalResponses = ParserUtils.Get(pattern, html, 1);
         result.Add("Total Responses", totalResponses);
     }
 }
