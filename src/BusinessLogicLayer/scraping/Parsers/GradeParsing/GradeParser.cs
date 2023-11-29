@@ -23,20 +23,20 @@ public class GradeParser : IGradeParser
         GradeList = ParseGradeList();
     }
 
-    public static readonly Dictionary<Grade.GradeType, string> DtuWebsiteGradeNames = new()
+    public static readonly Dictionary<GradeType, string> DtuWebsiteGradeNames = new()
     {
-        { Grade.GradeType.SevenStep12, "12" },
-        { Grade.GradeType.SevenStep10, "10" },
-        { Grade.GradeType.SevenStep7, "7" },
-        { Grade.GradeType.SevenStep4, "4" },
-        { Grade.GradeType.SevenStep02, "02" },
-        { Grade.GradeType.SevenStep00, "00" },
-        { Grade.GradeType.SevenStepMinus3, "-3" },
-        { Grade.GradeType.Passed, "Best&#229;et" },
-        { Grade.GradeType.Failed, "Ikke best&#229;et" },
-        { Grade.GradeType.Absent, "Ej m&#248;dt" },
-        { Grade.GradeType.Sick, "Syg" },
-        { Grade.GradeType.NotApproved, "Ikke Godkendt" },
+        { GradeType.SevenStep12, "12" },
+        { GradeType.SevenStep10, "10" },
+        { GradeType.SevenStep7, "7" },
+        { GradeType.SevenStep4, "4" },
+        { GradeType.SevenStep02, "02" },
+        { GradeType.SevenStep00, "00" },
+        { GradeType.SevenStepMinus3, "-3" },
+        { GradeType.Passed, "Best&#229;et" },
+        { GradeType.Failed, "Ikke best&#229;et" },
+        { GradeType.Absent, "Ej m&#248;dt" },
+        { GradeType.Sick, "Syg" },
+        { GradeType.NotApproved, "Ikke Godkendt" },
     };
 
     private string ParseID()
@@ -90,8 +90,8 @@ public class GradeParser : IGradeParser
         List<Grade> gradeList = new();
         foreach (var gradeType in DtuWebsiteGradeNames)
         {
-            Grade grade = Grade.CreateGrade(gradeType.Key);
-            grade.Quantity = ParseGrade(gradeType.Value);
+            Grade grade = GradeFactory.CreateGrade(gradeType.Key);
+            grade.AddQuantity(ParseGrade(gradeType.Value));
             gradeList.Add(grade);
         }
         return gradeList;
