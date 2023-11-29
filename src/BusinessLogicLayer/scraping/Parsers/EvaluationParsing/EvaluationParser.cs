@@ -29,27 +29,27 @@ public class EvalParser : IEvalParser
         EvalWebsiteUrlNumber = -1;
     }
 
-    public static readonly Dictionary<Eval.EvalType, string> DtuWebsiteEvalNames = new()
+    public static readonly Dictionary<EvalQuestion, string> DtuWebsiteEvalNames = new()
     {
-        { Eval.EvalType.LearnedMuch, "1.1" },
-        { Eval.EvalType.LearningObjectives, "1.2" },
-        { Eval.EvalType.MotivatingActivities, "1.3" },
-        { Eval.EvalType.OppertunityForFeedback, "1.4" },
-        { Eval.EvalType.ClearExpectations, "1.5" },
-        { Eval.EvalType.TimeSpentOnCourse, "2.1" },
+        { EvalQuestion.LearnedMuch, "1.1" },
+        { EvalQuestion.LearningObjectives, "1.2" },
+        { EvalQuestion.MotivatingActivities, "1.3" },
+        { EvalQuestion.OppertunityForFeedback, "1.4" },
+        { EvalQuestion.ClearExpectations, "1.5" },
+        { EvalQuestion.TimeSpentOnCourse, "2.1" },
     };
 
-    public static readonly Dictionary<LegacyEval.LegacyEvalType, string> DtuWebsiteLegacyEvalNames = new()
+    public static readonly Dictionary<EvalLegacyQuestion, string> DtuWebsiteLegacyEvalNames = new()
     {
-        { LegacyEval.LegacyEvalType.LearnedMuch, "1" },
-        { LegacyEval.LegacyEvalType.EncouragedToParticipate, "2" },
-        { LegacyEval.LegacyEvalType.MotivatingActivities, "3" },
-        { LegacyEval.LegacyEvalType.OppertunityForFeedback, "4" },
-        { LegacyEval.LegacyEvalType.ActivityContinuity, "5" },
-        { LegacyEval.LegacyEvalType.TimeSpentOnCourse, "6" },
-        { LegacyEval.LegacyEvalType.PrerequisiteLevel, "7" },
-        { LegacyEval.LegacyEvalType.GenerallyGoodCourse, "8" },
-        { LegacyEval.LegacyEvalType.PromptedToEvaluate, "9" },
+        { EvalLegacyQuestion.LearnedMuch, "1" },
+        { EvalLegacyQuestion.EncouragedToParticipate, "2" },
+        { EvalLegacyQuestion.MotivatingActivities, "3" },
+        { EvalLegacyQuestion.OppertunityForFeedback, "4" },
+        { EvalLegacyQuestion.ActivityContinuity, "5" },
+        { EvalLegacyQuestion.TimeSpentOnCourse, "6" },
+        { EvalLegacyQuestion.PrerequisiteLevel, "7" },
+        { EvalLegacyQuestion.GenerallyGoodCourse, "8" },
+        { EvalLegacyQuestion.PromptedToEvaluate, "9" },
     };
 
     private string ParseID()
@@ -126,8 +126,8 @@ public class EvalParser : IEvalParser
         List<Eval> evalList = new();
         foreach (var evalType in DtuWebsiteEvalNames)
         {
-            Eval eval = Eval.CreateEval(evalType.Key);
-            eval.Responses = ParseQuestion(evalType.Value);
+            Eval eval = EvalFactory.CreateEval(evalType.Key);
+            eval.ResponseCount = ParseQuestion(evalType.Value);
             evalList.Add(eval);
         }
         if (evalList.Count == 0)
@@ -142,8 +142,8 @@ public class EvalParser : IEvalParser
         List<Eval> evalList = new();
         foreach (var evalType in DtuWebsiteLegacyEvalNames)
         {
-            Eval eval = LegacyEval.CreateEval(evalType.Key);
-            eval.Responses = ParseQuestion(evalType.Value);
+            Eval eval = EvalFactory.CreateLegacyEval(evalType.Key);
+            eval.ResponseCount = ParseQuestion(evalType.Value);
             evalList.Add(eval);
         }
         return evalList;

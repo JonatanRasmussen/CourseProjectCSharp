@@ -4,25 +4,15 @@ namespace CourseProject;
 
 public class EvalPage
 {
-    public string ID { get; }
-    public string Name { get; }
-    public string Term { get; }
-    public int CouldRespond { get; }
-    public int DidRespond { get; }
-    public int ShouldNotRespond { get; }
-    public string LastUpdated { get; }
+    public CourseMetaData MetaData { get; }
+    public EvalResponseRate ResponseRate { get; }
     public List<Eval> EvalList { get; }
     public int EvalWebsiteUrlNumber { get; }
 
     public EvalPage(IEvalParser dataParser)
     {
-        ID = dataParser.ID;
-        Name = dataParser.Name;
-        Term = dataParser.Term;
-        CouldRespond = dataParser.CouldRespond;
-        DidRespond = dataParser.DidRespond;
-        ShouldNotRespond = dataParser.ShouldNotRespond;
-        LastUpdated = dataParser.LastUpdated;
+        MetaData = CreateMetaData(dataParser);
+        ResponseRate = CreateResponseData(dataParser);
         EvalList = dataParser.EvalList;
         EvalWebsiteUrlNumber = dataParser.EvalWebsiteUrlNumber;
     }
@@ -31,5 +21,22 @@ public class EvalPage
     {
         IEvalParser setDefaultValues = new EvalDefaults();
         return new EvalPage(setDefaultValues);
+    }
+
+    private static CourseMetaData CreateMetaData(IEvalParser dataParser)
+    {
+        string code = dataParser.ID;
+        string name = dataParser.Name;
+        string time = dataParser.Term;
+        string lastUpdated = dataParser.LastUpdated;
+        return new(code, name, time, lastUpdated);
+    }
+
+    private static EvalResponseRate CreateResponseData(IEvalParser dataParser)
+    {
+        int couldRespond = dataParser.CouldRespond;
+        int didRespond = dataParser.DidRespond;
+        int shouldNotRespond = dataParser.ShouldNotRespond;
+        return new(couldRespond, didRespond, shouldNotRespond);
     }
 }

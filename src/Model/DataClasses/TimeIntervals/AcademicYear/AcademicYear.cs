@@ -38,13 +38,10 @@ public class AcademicYear
 
     public bool IsEmpty()
     {
-        if (StartYear == EmptyValue)
+        if (StartYear == CreateEmpty().StartYear)
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 }
