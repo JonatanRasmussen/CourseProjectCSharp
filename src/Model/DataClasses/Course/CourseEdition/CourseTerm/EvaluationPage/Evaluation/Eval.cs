@@ -13,6 +13,8 @@ public class Eval
     public int ResponseTypeMiddle { get; }
     public int ResponseTypeHigh { get; }
     public int ResponseTypeVeryHigh { get; }
+    public float TweakedAverage { get; }
+
 
     public Eval(string name, string question, EvalAnswerType answerType, Dictionary<string, int> responseCounts)
     {
@@ -25,6 +27,38 @@ public class Eval
         ResponseTypeMiddle = CountResponseType(EvalAnswerOptions.Middle);
         ResponseTypeHigh = CountResponseType(EvalAnswerOptions.High);
         ResponseTypeVeryHigh = CountResponseType(EvalAnswerOptions.VeryHigh);
+        TweakedAverage = CalculateTweakedAverage();
+    }
+
+    public float CalculateTweakedAverage()
+    {
+        int totalResponses = ResponseCount.Values.Sum();
+        if (totalResponses <= 0) // Do not divide by 0 when calculating the average
+        {
+            return 0;
+        }
+        float evaluation_average = 0;
+        evaluation_average += 1 * ResponseTypeVeryLow;  // 1-rating
+        evaluation_average += 2 * ResponseTypeLow;      // 2-rating
+        evaluation_average += 3 * ResponseTypeMiddle;   // 3-rating
+        evaluation_average += 4 * ResponseTypeHigh;     // 4-rating
+        evaluation_average += 5 * ResponseTypeVeryHigh; // 5-rating
+        evaluation_average /= totalResponses;   // divide across responses to find average
+
+
+        // true_average is a number between 1-5 (center value is 3)
+        // For workload, the deviation from center value 3 is exaggerated (up to a factor 2)
+        // The scores 2.9 and 3.1 are converted to ~2.8 and ~3.2 (factor 1.95 because they are close to center value 3)
+        // The scores 2.0 and 4.0 are converted to 1.5 and 4.5 (factor 1.5 because they are far from center value 3)
+        // The scores 1.0 and 5.0 are unchanged (factor 1 because 1 must be minimum and 5 must be maximum)
+        if (ThisIsQ6())
+        {
+            // deviation_factor is a number between 1 and 2
+            float deviation_factor = 2 - (Math.Abs(evaluation_average - 3) / 2);
+            float converted_average = (evaluation_average - 3) * deviation_factor;
+            evaluation_average = 3 + converted_average;
+        }
+        return evaluation_average;
     }
 
     public static Eval FindQ1(List<Eval> evalList)
@@ -69,14 +103,29 @@ public class Eval
         return FindQ(modernQ, legacyQ, evalList);
     }
 
-    private static Eval FindQ(EvalQuestion evalType, EvalLegacyQuestion legacyEvalType, List<Eval> evalList)
+    public bool ThisIsQ6()
     {
-        var modernQ = EvalFactory.CreateEval(evalType, new());
-        var legacyQ = EvalFactory.CreateLegacyEval(legacyEvalType, new());
+        var modernQ = EvalQuestion.TimeSpentOnCourse;
+        var legacyQ = EvalLegacyQuestion.TimeSpentOnCourse;
+        var modernEval = EvalFactory.CreateEval(modernQ, new());
+        var legacyEval = EvalFactory.CreateLegacyEval(legacyQ, new());
+        bool evalMatchesModernQ = QuestionPrompt == modernEval.QuestionPrompt;
+        bool evalMatchesLegacyQ = QuestionPrompt == legacyEval.QuestionPrompt;
+        if (evalMatchesModernQ || evalMatchesLegacyQ)
+        {
+            return true;
+        };
+        return false;
+    }
+
+    private static Eval FindQ(EvalQuestion modernQ, EvalLegacyQuestion legacyQ, List<Eval> evalList)
+    {
+        var modernEval = EvalFactory.CreateEval(modernQ, new());
+        var legacyEval = EvalFactory.CreateLegacyEval(legacyQ, new());
         foreach (Eval eval in evalList)
         {
-            bool evalMatchesModernQ = eval.QuestionPrompt == modernQ.QuestionPrompt;
-            bool evalMatchesLegacyQ = eval.QuestionPrompt == legacyQ.QuestionPrompt;
+            bool evalMatchesModernQ = eval.QuestionPrompt == modernEval.QuestionPrompt;
+            bool evalMatchesLegacyQ = eval.QuestionPrompt == legacyEval.QuestionPrompt;
             if (evalMatchesModernQ || evalMatchesLegacyQ)
             {
                 return eval;
@@ -87,10 +136,6 @@ public class Eval
 
     private int CountResponseType(List<string> answerOptions)
     {
-        if (ResponseCount.Count == 0 || ResponseCount.Count == 3)
-        {
-            return 0; // Count==0 case for Empty evals, Count==3 case for LegacyEval Q9
-        }
         foreach (var answerOption in answerOptions)
         {
             if (ResponseCount.ContainsKey(answerOption))
@@ -98,6 +143,10 @@ public class Eval
                 return ResponseCount[answerOption];
             }
         }
-        return -1; // This should never happen
+        if (ResponseCount.Count == 0 || ResponseCount.Count == 3) // Count==3 MUST be after the foreach loop
+        {
+            return 0; // Count==0 is for Eval.CreateEmpty(), Count==3 is for LegacyEval Q9
+        }
+        return -999999; // This should never happen
     }
 }

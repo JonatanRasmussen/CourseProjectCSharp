@@ -61,9 +61,4 @@ public class EvalFactory
     {
         return CreateEval(EvalQuestion.EmptyValue, new());
     }
-
-    public static bool IsEmpty(Eval instance)
-    {
-        return object.ReferenceEquals(instance, CreateEmpty());
-    }
 }
