@@ -42,22 +42,28 @@ public class EvalFactory
         { EvalLegacyQuestion.PrerequisiteLevel, ("Q7", LegacyQ7, EvalAnswerType.LegacyLowHigh) },
         { EvalLegacyQuestion.GenerallyGoodCourse, ("Q8", LegacyQ8, EvalAnswerType.AgreeDisagree) },
         { EvalLegacyQuestion.PromptedToEvaluate, ("Q9", LegacyQ9, EvalAnswerType.LegacyYesNo) },
+        { EvalLegacyQuestion.EmptyValue, (string.Empty, string.Empty, EvalAnswerType.EmptyValue) },
     };
 
-    public static Eval CreateEval(EvalQuestion evalType)
+    public static Eval CreateEval(EvalQuestion evalType, Dictionary<string, int> responseCounts)
     {
         var (name, question, answerOptions) = EvalQuestionConfig[evalType];
-        return new Eval(name, question, answerOptions);
+        return new Eval(name, question, answerOptions, responseCounts);
     }
 
-    public static Eval CreateLegacyEval(EvalLegacyQuestion evalType)
+    public static Eval CreateLegacyEval(EvalLegacyQuestion evalType, Dictionary<string, int> responseCounts)
     {
         var (name, question, answerOptions) = EvalLegacyQuestionConfig[evalType];
-        return new Eval(name, question, answerOptions);
+        return new Eval(name, question, answerOptions, responseCounts);
     }
 
     public static Eval CreateEmpty()
     {
-        return CreateEval(EvalQuestion.EmptyValue);
+        return CreateEval(EvalQuestion.EmptyValue, new());
+    }
+
+    public static bool IsEmpty(Eval instance)
+    {
+        return object.ReferenceEquals(instance, CreateEmpty());
     }
 }

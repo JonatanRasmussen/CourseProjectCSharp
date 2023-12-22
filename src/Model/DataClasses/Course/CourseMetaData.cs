@@ -4,32 +4,42 @@ namespace CourseProject;
 
 public class CourseMetaData
 {
+    private static readonly string EmptyTitle = "Alltime";
     public string Code { get; }
     public string Name { get; }
-    public string FullTitle { get; }
+    public Term Term { get; }
+    public AcademicYear AcademicYear { get; }
     public string Time { get; }
-    public TimeInterval TimeInterval { get; }
+    public string FileNameString { get; }
+    public DateTime LastUpdatedDateTime { get; }
     public string LastUpdated { get; }
-    private DateTime LastUpdatedDateTime { get; }
 
-    public CourseMetaData(string code, string name, string time, string lastUpdated)
+    public CourseMetaData(string code, string name, string lastUpdated, Term term, AcademicYear academicYear)
     {
         Code = code;
         Name = name;
-        FullTitle = $"{code} {name}";
-        TimeInterval = TimeInterval.CreateTimeIntervalFromString(time);
-        Time = TimeInterval.Name;
+        Term = term;
+        AcademicYear = academicYear;
+        Time = GenerateTime();
+        FileNameString = $"{Time}_{Code}_{Name}";
         LastUpdatedDateTime = ParseLastUpdated(lastUpdated);
         LastUpdated = LastUpdatedDateTime.ToString("dd MMM yyyy");
     }
 
-    public static CourseMetaData CreateEmpty()
+    private string GenerateTime()
     {
-        string emptyCode = string.Empty;
-        string emptyName = string.Empty;
-        string emptyTime = string.Empty;
-        string emptyDate = string.Empty;
-        return new(emptyCode, emptyName, emptyTime, emptyDate);
+        if (!TermFactory.IsEmpty(Term))
+        {
+            return Term.Name;
+        }
+        else if (!AcademicYearFactory.IsEmpty(AcademicYear))
+        {
+            return AcademicYear.Name;
+        }
+        else
+        {
+            return EmptyTitle;
+        }
     }
 
     private static DateTime ParseLastUpdated(string lastUpdated)
@@ -45,7 +55,7 @@ public class CourseMetaData
         else
         {
             Console.WriteLine($"Error: Failed to parse the date '{lastUpdated}'");
-            var defaultDate = new DateTime(1970, 1, 1, 0, 0, 0);
+            var defaultDate = DateTime.MinValue;
             return defaultDate;
         }
     }

@@ -13,4 +13,5 @@ public enum EvalLegacyQuestion
     PrerequisiteLevel,
     GenerallyGoodCourse,
     PromptedToEvaluate,
+    EmptyValue,
 }

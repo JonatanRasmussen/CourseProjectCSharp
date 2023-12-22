@@ -6,7 +6,7 @@ public class EvalDefaults : IEvalParser
 {
     public string ID { get; }
     public string Name { get; }
-    public string Term { get; }
+    public string TermCode { get; }
     public int CouldRespond { get; }
     public int DidRespond { get; }
     public int ShouldNotRespond { get; }
@@ -17,7 +17,7 @@ public class EvalDefaults : IEvalParser
     {
         ID = string.Empty;
         Name = string.Empty;
-        Term = string.Empty;
+        TermCode = string.Empty;
         CouldRespond = -1;
         DidRespond = -1;
         ShouldNotRespond = -1;

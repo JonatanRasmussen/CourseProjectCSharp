@@ -6,7 +6,7 @@ public interface IEvalParser
 {
     string ID { get; }
     string Name { get; }
-    string Term { get; }
+    string TermCode { get; }
     int CouldRespond { get; }
     int DidRespond { get; }
     int ShouldNotRespond { get; }

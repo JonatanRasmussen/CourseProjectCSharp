@@ -20,10 +20,6 @@ class Program
     // This is a single-line comment
 
     /*
-        This is a multi-line comment.
-        You can add more lines here.
-    */
-
     static void Main(string[] args)
     {
         // Reading the JSON file into a string
@@ -44,6 +40,14 @@ class Program
         {
             Console.WriteLine($"{pair.Key} => {pair.Value}");
         }
+    }
+    */
+    static void Main(string[] args)
+    {
+        var testObject = ConcreteFactory.GetInstance((1, "example"));
+        var anotherObject = CopyConcreteFactory.GetInstance((2,"hey"));
+        Console.WriteLine($"{testObject.Str}");
+        Console.WriteLine($"{anotherObject.Str}");
     }
 }
 

@@ -10,11 +10,11 @@
         "projectUniqueName": "C:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
         "projectName": "CourseProjectCSharp",
         "projectPath": "C:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
-        "packagesPath": "C:\\Users\\budob_5mcwy7q\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\BudoB\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\budob_5mcwy7q\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\BudoB\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"

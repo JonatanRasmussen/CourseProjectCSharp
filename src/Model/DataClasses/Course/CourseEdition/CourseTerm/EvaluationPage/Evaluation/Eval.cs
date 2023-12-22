@@ -6,15 +6,25 @@ public class Eval
 {
     public string QuestionNumber { get; }
     public string QuestionPrompt { get; }
-    public EvalAnswerType AnswerOptions { get; }
-    public Dictionary<string, int> ResponseCount { get; set; }
+    public EvalAnswerType AnswerType { get; }
+    private Dictionary<string, int> ResponseCount { get; }
+    public int ResponseTypeVeryLow { get; }
+    public int ResponseTypeLow { get; }
+    public int ResponseTypeMiddle { get; }
+    public int ResponseTypeHigh { get; }
+    public int ResponseTypeVeryHigh { get; }
 
-    public Eval(string name, string question, EvalAnswerType answerOptions)
+    public Eval(string name, string question, EvalAnswerType answerType, Dictionary<string, int> responseCounts)
     {
         QuestionNumber = name;
         QuestionPrompt = question;
-        AnswerOptions = answerOptions;
-        ResponseCount = new();
+        AnswerType = answerType;
+        ResponseCount = responseCounts;
+        ResponseTypeVeryLow = CountResponseType(EvalAnswerOptions.VeryLow);
+        ResponseTypeLow = CountResponseType(EvalAnswerOptions.Low);
+        ResponseTypeMiddle = CountResponseType(EvalAnswerOptions.Middle);
+        ResponseTypeHigh = CountResponseType(EvalAnswerOptions.High);
+        ResponseTypeVeryHigh = CountResponseType(EvalAnswerOptions.VeryHigh);
     }
 
     public static Eval FindQ1(List<Eval> evalList)
@@ -27,7 +37,7 @@ public class Eval
     public static Eval FindQ2(List<Eval> evalList)
     {
         var modernQ = EvalQuestion.LearningObjectives;
-        var legacyQ = EvalLegacyQuestion.ActivityContinuity; // Note to self: fix??
+        var legacyQ = EvalLegacyQuestion.EmptyValue;
         return FindQ(modernQ, legacyQ, evalList);
     }
 
@@ -48,7 +58,7 @@ public class Eval
     public static Eval FindQ5(List<Eval> evalList)
     {
         var modernQ = EvalQuestion.ClearExpectations;
-        var legacyQ = EvalLegacyQuestion.EncouragedToParticipate; // Note to self: fix??
+        var legacyQ = EvalLegacyQuestion.EmptyValue;
         return FindQ(modernQ, legacyQ, evalList);
     }
 
@@ -61,8 +71,8 @@ public class Eval
 
     private static Eval FindQ(EvalQuestion evalType, EvalLegacyQuestion legacyEvalType, List<Eval> evalList)
     {
-        var modernQ = EvalFactory.CreateEval(evalType);
-        var legacyQ = EvalFactory.CreateLegacyEval(legacyEvalType);
+        var modernQ = EvalFactory.CreateEval(evalType, new());
+        var legacyQ = EvalFactory.CreateLegacyEval(legacyEvalType, new());
         foreach (Eval eval in evalList)
         {
             bool evalMatchesModernQ = eval.QuestionPrompt == modernQ.QuestionPrompt;
@@ -75,12 +85,19 @@ public class Eval
         return EvalFactory.CreateEmpty();
     }
 
-    public bool IsEmpty()
+    private int CountResponseType(List<string> answerOptions)
     {
-        if (QuestionPrompt == EvalFactory.CreateEmpty().QuestionPrompt)
+        if (ResponseCount.Count == 0 || ResponseCount.Count == 3)
         {
-            return true;
+            return 0; // Count==0 case for Empty evals, Count==3 case for LegacyEval Q9
         }
-        return false;
+        foreach (var answerOption in answerOptions)
+        {
+            if (ResponseCount.ContainsKey(answerOption))
+            {
+                return ResponseCount[answerOption];
+            }
+        }
+        return -1; // This should never happen
     }
 }

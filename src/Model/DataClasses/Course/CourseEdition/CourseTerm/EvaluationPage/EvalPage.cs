@@ -11,7 +11,7 @@ public class EvalPage
 
     public EvalPage(IEvalParser dataParser)
     {
-        MetaData = CreateMetaData(dataParser);
+        MetaData = CourseMetaDataFactory.CreateFromEvalParser(dataParser);
         ResponseRate = CreateResponseData(dataParser);
         EvalList = dataParser.EvalList;
         EvalWebsiteUrlNumber = dataParser.EvalWebsiteUrlNumber;
@@ -21,15 +21,6 @@ public class EvalPage
     {
         IEvalParser setDefaultValues = new EvalDefaults();
         return new EvalPage(setDefaultValues);
-    }
-
-    private static CourseMetaData CreateMetaData(IEvalParser dataParser)
-    {
-        string code = dataParser.ID;
-        string name = dataParser.Name;
-        string time = dataParser.Term;
-        string lastUpdated = dataParser.LastUpdated;
-        return new(code, name, time, lastUpdated);
     }
 
     private static EvalResponseRate CreateResponseData(IEvalParser dataParser)

@@ -7,7 +7,7 @@ public class EvalParser : IEvalParser
     private string PageSource { get; }
     public string ID { get; }
     public string Name { get; }
-    public string Term { get; }
+    public string TermCode { get; }
     public int CouldRespond { get; }
     public int DidRespond { get; }
     public int ShouldNotRespond { get; }
@@ -20,7 +20,7 @@ public class EvalParser : IEvalParser
         PageSource = html;
         ID = ParseID();
         Name = ParseName();
-        Term = ParseTerm();
+        TermCode = ParseTerm();
         CouldRespond = ParseCouldRespond();
         DidRespond = ParseDidRespond();
         ShouldNotRespond = ParseShouldNotRespond();
@@ -126,8 +126,8 @@ public class EvalParser : IEvalParser
         List<Eval> evalList = new();
         foreach (var evalType in DtuWebsiteEvalNames)
         {
-            Eval eval = EvalFactory.CreateEval(evalType.Key);
-            eval.ResponseCount = ParseQuestion(evalType.Value);
+            var questionResponses = ParseQuestion(evalType.Value);
+            Eval eval = EvalFactory.CreateEval(evalType.Key, questionResponses);
             evalList.Add(eval);
         }
         if (evalList.Count == 0)
@@ -142,8 +142,8 @@ public class EvalParser : IEvalParser
         List<Eval> evalList = new();
         foreach (var evalType in DtuWebsiteLegacyEvalNames)
         {
-            Eval eval = EvalFactory.CreateLegacyEval(evalType.Key);
-            eval.ResponseCount = ParseQuestion(evalType.Value);
+            var questionResponses = ParseQuestion(evalType.Value);
+            Eval eval = EvalFactory.CreateLegacyEval(evalType.Key, questionResponses);
             evalList.Add(eval);
         }
         return evalList;
@@ -179,8 +179,8 @@ public class EvalParser : IEvalParser
         {
             count++;
             string key = kvp.Key;
-            if (key.Length == 0)
-            {
+            if (key.Length == 0) // In evaluations from F2019 and earlier,
+            {                    // response option 2, 3 and 4 is blank
                 key = FixLegacyEvalAnswers(count, mostRecentKey);
             }
             else
@@ -197,36 +197,36 @@ public class EvalParser : IEvalParser
     {
         if (iteration == 2)
         {
-            if (firstKey == "Helt enig")
+            if (firstKey == EvalAnswerOptions.AgreeDisagreeVeryHigh)
             {
-                return "Enig";
+                return EvalAnswerOptions.AgreeDisagreeHigh;
             }
-            else if (firstKey == "Meget mindre")
+            else if (firstKey == EvalAnswerOptions.MoreLessVeryLow)
             {
-                return "Mindre";
+                return EvalAnswerOptions.MoreLessLow;
             }
-            else if (firstKey == "For lave")
+            else if (firstKey == EvalAnswerOptions.LegacyLowHighVeryLow)
             {
-                return "Lave";
+                return EvalAnswerOptions.LegacyLowHighLow;
             }
         }
         else if (iteration == 3)
         {
-            return "Hverken eller";
+            return EvalAnswerOptions.AgreeDisagreeMiddle;
         }
         else if (iteration == 4)
         {
-            if (firstKey == "Helt enig")
+            if (firstKey == EvalAnswerOptions.AgreeDisagreeVeryHigh)
             {
-                return "Unig";
+                return EvalAnswerOptions.AgreeDisagreeLow;
             }
-            else if (firstKey == "Meget mindre")
+            else if (firstKey == EvalAnswerOptions.MoreLessVeryLow)
             {
-                return "St&#248;rre";
+                return EvalAnswerOptions.LegacyMoreLessHigh;
             }
-            else if (firstKey == "For h&#248;je")
+            else if (firstKey == EvalAnswerOptions.LegacyLowHighVeryHigh)
             {
-                return "H&#248;je";
+                return EvalAnswerOptions.LegacyLowHighHigh;
             }
         }
         Console.WriteLine("Warning: Unknown evaluation response key");

@@ -21,6 +21,8 @@ public class EvalStatistics
         TimeSpentOnCourse = Eval.FindQ6(evalList);
     }
 
+
+
     public static EvalStatistics CreateEmpty()
     {
         List<Eval> emptyList = new();

@@ -7,7 +7,7 @@ namespace CourseProject;
 public static class ParserUtils
 {
 
-    public static readonly string PatternNotFound = "Data not available";
+    public static readonly string PatternNotFound = "ErrorString";
     public static readonly int FailedNumericConversion = -1;
 
     public static string Get(string pattern, string html, int groupIndex)

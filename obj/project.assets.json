@@ -8,7 +8,7 @@
     "net7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\budob_5mcwy7q\\.nuget\\packages\\": {}
+    "C:\\Users\\BudoB\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -16,11 +16,11 @@
       "projectUniqueName": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
       "projectName": "CourseProjectCSharp",
       "projectPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
-      "packagesPath": "C:\\Users\\budob_5mcwy7q\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\BudoB\\.nuget\\packages\\",
       "outputPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\budob_5mcwy7q\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\BudoB\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"

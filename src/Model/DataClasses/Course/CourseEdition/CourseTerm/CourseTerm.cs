@@ -4,14 +4,25 @@ namespace CourseProject;
 
 public class CourseTerm
 {
-    public string ID { get; }
-    public string Name { get; }
-    public string ExamPeriod { get; }
 
-    public CourseTerm()
+    public EvalPage EvalPage { get; }
+    public GradePage GradePage { get; }
+    public CourseMetaData MetaData { get; }
+
+    public CourseTerm(EvalPage evalPage, GradePage gradePage)
     {
-        ID = string.Empty;
-        Name = string.Empty;
-        ExamPeriod = string.Empty;
+        EvalPage = evalPage;
+        GradePage = gradePage;
+        MetaData = GenerateMetaData();
+    }
+
+    private CourseMetaData GenerateMetaData()
+    {
+        List<CourseMetaData> metaDataList = new()
+        {
+            EvalPage.MetaData,
+            GradePage.MetaData,
+        };
+        return CourseMetaDataFactory.CreateByMerging(metaDataList);
     }
 }
