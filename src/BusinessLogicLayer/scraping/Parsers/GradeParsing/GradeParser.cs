@@ -5,6 +5,7 @@ namespace CourseProject;
 public class GradeParser : IGradeParser
 {
     private string PageSource { get; }
+    public string Url { get; }
     public string ID { get; }
     public string Name { get; }
     public string ExamPeriod { get; }
@@ -12,9 +13,10 @@ public class GradeParser : IGradeParser
     public string LastUpdated { get; }
     public List<Grade> GradeList { get; }
 
-    public GradeParser(string html)
+    public GradeParser(string html, string url)
     {
         PageSource = html;
+        Url = url;
         ID = ParseID();
         Name = ParseName();
         ExamPeriod = ParseExamPeriod();

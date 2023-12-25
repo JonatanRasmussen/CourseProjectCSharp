@@ -4,6 +4,7 @@ namespace CourseProject;
 
 public class GradeDefaults : IGradeParser
 {
+    public string Url { get; }
     public string ID { get; }
     public string Name { get; }
     public string ExamPeriod { get; }
@@ -12,6 +13,7 @@ public class GradeDefaults : IGradeParser
     public List<Grade> GradeList { get; }
     public GradeDefaults()
     {
+        Url = string.Empty;
         ID = string.Empty;
         Name = string.Empty;
         ExamPeriod = string.Empty;

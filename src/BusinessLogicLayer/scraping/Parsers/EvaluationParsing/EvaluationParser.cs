@@ -5,6 +5,7 @@ namespace CourseProject;
 public class EvalParser : IEvalParser
 {
     private string PageSource { get; }
+    public string Url { get; }
     public string ID { get; }
     public string Name { get; }
     public string TermCode { get; }
@@ -13,11 +14,11 @@ public class EvalParser : IEvalParser
     public int ShouldNotRespond { get; }
     public string LastUpdated { get; }
     public List<Eval> EvalList { get; }
-    public int EvalWebsiteUrlNumber { get; }
 
-    public EvalParser(string html)
+    public EvalParser(string html, string url)
     {
         PageSource = html;
+        Url = url;
         ID = ParseID();
         Name = ParseName();
         TermCode = ParseTerm();
@@ -26,7 +27,6 @@ public class EvalParser : IEvalParser
         ShouldNotRespond = ParseShouldNotRespond();
         LastUpdated = ParseLastUpdated();
         EvalList = ParseEvalList();
-        EvalWebsiteUrlNumber = -1;
     }
 
     public static readonly Dictionary<EvalQuestion, string> DtuWebsiteEvalNames = new()

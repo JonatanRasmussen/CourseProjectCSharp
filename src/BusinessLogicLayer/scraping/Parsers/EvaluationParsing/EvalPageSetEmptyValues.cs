@@ -4,6 +4,7 @@ namespace CourseProject;
 
 public class EvalDefaults : IEvalParser
 {
+    public string Url { get; }
     public string ID { get; }
     public string Name { get; }
     public string TermCode { get; }
@@ -12,9 +13,9 @@ public class EvalDefaults : IEvalParser
     public int ShouldNotRespond { get; }
     public string LastUpdated { get; }
     public List<Eval> EvalList { get; }
-    public int EvalWebsiteUrlNumber { get; }
     public EvalDefaults()
     {
+        Url = string.Empty;
         ID = string.Empty;
         Name = string.Empty;
         TermCode = string.Empty;
@@ -23,6 +24,5 @@ public class EvalDefaults : IEvalParser
         ShouldNotRespond = -1;
         LastUpdated = string.Empty;
         EvalList = new();
-        EvalWebsiteUrlNumber = -1;
     }
 }

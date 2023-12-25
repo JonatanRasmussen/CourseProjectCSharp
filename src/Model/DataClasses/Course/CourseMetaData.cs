@@ -5,6 +5,7 @@ namespace CourseProject;
 public class CourseMetaData
 {
     private static readonly string EmptyTitle = "Alltime";
+    public string Url { get; }
     public string Code { get; }
     public string Name { get; }
     public Term Term { get; }
@@ -14,8 +15,9 @@ public class CourseMetaData
     public DateTime LastUpdatedDateTime { get; }
     public string LastUpdated { get; }
 
-    public CourseMetaData(string code, string name, string lastUpdated, Term term, AcademicYear academicYear)
+    public CourseMetaData(string url, string code, string name, string lastUpdated, Term term, AcademicYear academicYear)
     {
+        Url = url;
         Code = code;
         Name = name;
         Term = term;

@@ -4,6 +4,7 @@ namespace CourseProject;
 
 public interface IEvalParser
 {
+    string Url { get; }
     string ID { get; }
     string Name { get; }
     string TermCode { get; }
@@ -12,5 +13,4 @@ public interface IEvalParser
     int ShouldNotRespond { get; }
     string LastUpdated { get; }
     List<Eval> EvalList { get; }
-    int EvalWebsiteUrlNumber { get; }
 }

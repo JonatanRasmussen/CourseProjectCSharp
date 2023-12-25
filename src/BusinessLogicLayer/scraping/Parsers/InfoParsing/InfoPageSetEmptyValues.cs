@@ -4,6 +4,7 @@ namespace CourseProject;
 
 public class InfoDefaults : IInfoParser
 {
+    public string Url { get; }
     public string ID { get; }
     public string Name { get; }
     public string Year { get; }
@@ -14,6 +15,7 @@ public class InfoDefaults : IInfoParser
 
     public InfoDefaults()
     {
+        Url = string.Empty;
         ID = string.Empty;
         Name = string.Empty;
         Year = string.Empty;

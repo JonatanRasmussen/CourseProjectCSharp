@@ -4,6 +4,7 @@ namespace CourseProject;
 
 public class InfoParser : IInfoParser
 {
+    public string Url { get; }
     private string PageSource { get; }
     public string ID { get; }
     public string Name { get; }
@@ -13,9 +14,10 @@ public class InfoParser : IInfoParser
     public Dictionary<string,string> InfoTableContent { get; }
     public string LastUpdated { get; }
 
-    public InfoParser(string html)
+    public InfoParser(string html, string url)
     {
         PageSource = html;
+        Url = url;
         ID = ParseCourseIdInfo();
         Name = ParseCourseNameInfo();
         Year = ParseYearInfo();
