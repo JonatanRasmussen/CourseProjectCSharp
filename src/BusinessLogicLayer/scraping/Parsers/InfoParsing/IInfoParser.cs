@@ -4,6 +4,7 @@ namespace CourseProject;
 
 public interface IInfoParser
 {
+    public string Url { get; }
     string ID { get; }
     string Name { get; }
     string Year { get; }
