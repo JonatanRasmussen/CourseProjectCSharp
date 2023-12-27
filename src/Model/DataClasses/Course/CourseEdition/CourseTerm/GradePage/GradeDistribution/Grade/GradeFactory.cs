@@ -22,14 +22,15 @@ public class GradeFactory
         { GradeType.EmptyValue, (string.Empty, UndefinedWeight, GradeResult.Absent) },
     };
 
-    public static Grade CreateGrade(GradeType gradeType)
+    public static Grade CreateGrade(GradeType gradeType, int gradeCount)
     {
         var (name, weight, examStatus) = GradeConfig[gradeType];
-        return new Grade(name, weight, examStatus);
+        return new Grade(name, weight, examStatus, gradeCount);
     }
 
     public static Grade CreateEmpty()
     {
-        return CreateGrade(GradeType.EmptyValue);
+        int gradeQuantity = 0;
+        return CreateGrade(GradeType.EmptyValue, gradeQuantity);
     }
 }

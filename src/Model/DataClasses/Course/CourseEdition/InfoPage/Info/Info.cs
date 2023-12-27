@@ -4,14 +4,13 @@ namespace CourseProject;
 
 public class Info
 {
-    public enum GenericInfoType
+    public string TableKey { get; }
+    public string Value { get; }
+
+    public Info(string tableKey, string value)
     {
-        CourseID,
-        CourseName,
-        Year,
-        Announcement,
-        StudyLines,
-        LastUpdated,
+        TableKey = tableKey;
+        Value = value;
     }
 
     public enum PrimaryTableInfoType

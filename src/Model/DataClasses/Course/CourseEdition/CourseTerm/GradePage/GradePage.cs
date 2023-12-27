@@ -5,13 +5,13 @@ namespace CourseProject;
 public class GradePage
 {
     public CourseMetaData MetaData { get; }
-    public List<Grade> GradeList { get; }
+    public GradeStatistics GradeStatistics { get; }
     public List<string> OtherVersions { get; }
 
     public GradePage(IGradeParser dataParser)
     {
         MetaData = CourseMetaDataFactory.CreateFromGradeParser(dataParser);
-        GradeList = dataParser.GradeList;
+        GradeStatistics = new(dataParser);
         OtherVersions = dataParser.OtherVersions;
     }
 

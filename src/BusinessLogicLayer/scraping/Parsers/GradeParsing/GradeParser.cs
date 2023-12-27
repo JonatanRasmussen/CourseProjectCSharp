@@ -92,8 +92,8 @@ public class GradeParser : IGradeParser
         List<Grade> gradeList = new();
         foreach (var gradeType in DtuWebsiteGradeNames)
         {
-            Grade grade = GradeFactory.CreateGrade(gradeType.Key);
-            grade.AddQuantity(ParseGrade(gradeType.Value));
+            int gradeCount = ParseGrade(gradeType.Value);
+            Grade grade = GradeFactory.CreateGrade(gradeType.Key, gradeCount);
             gradeList.Add(grade);
         }
         return gradeList;

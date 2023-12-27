@@ -11,13 +11,13 @@ public class Grade
     public GradeResult Result { get; }
     public int Quantity { get; private set; }
 
-    public Grade(string name, float weight, GradeResult result)
+    public Grade(string name, float weight, GradeResult result, int quantity)
     {
         Name = name;
         NumericalWeight = weight;
         HasNumericWeight = weight != UndefinedWeight;
         Result = result;
-        Quantity = 0;
+        Quantity = quantity;
     }
 
     public static List<Grade> GradeCollection()
@@ -25,14 +25,10 @@ public class Grade
         List<Grade> list = new();
         foreach (GradeType gradeType in Enum.GetValues(typeof(GradeType)))
         {
-            list.Add(GradeFactory.CreateGrade(gradeType));
+            int gradeQuantity = 0;
+            list.Add(GradeFactory.CreateGrade(gradeType, gradeQuantity));
         }
         return list;
-    }
-
-    public void AddQuantity(int quantity)
-    {
-        Quantity += quantity;
     }
 
     public bool IsEmpty()

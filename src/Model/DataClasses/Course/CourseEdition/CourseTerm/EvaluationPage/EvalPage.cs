@@ -10,13 +10,6 @@ public class EvalPage
     public EvalPage(IEvalParser dataParser)
     {
         MetaData = CourseMetaDataFactory.CreateFromEvalParser(dataParser);
-        EvalStatistics = new EvalStatistics(dataParser);
+        EvalStatistics = new(dataParser);
     }
-
-    public static EvalPage CreateEmpty()
-    {
-        IEvalParser setDefaultValues = new EvalDefaults();
-        return new EvalPage(setDefaultValues);
-    }
-
 }

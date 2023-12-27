@@ -27,43 +27,43 @@ public class InfoParser : IInfoParser
         LastUpdated = ParseLastUpdatedInfo();
     }
 
-    public static readonly Dictionary<Info.PrimaryTableInfoType, string> DtuWebsitePrimaryTableKeysEnglish = new()
+    public static readonly Dictionary<InfoTypePrimaryTable, string> DtuWebsitePrimaryTableKeysEnglish = new()
     {
-        {Info.PrimaryTableInfoType.DanishTitle, "Danish title"},
-        {Info.PrimaryTableInfoType.LanguageOfInstruction, "Language of instruction"},
-        {Info.PrimaryTableInfoType.Ects, "Point( ECTS )"},
-        {Info.PrimaryTableInfoType.CourseType, "Course type"},
-        {Info.PrimaryTableInfoType.Location, "Location"},
-        {Info.PrimaryTableInfoType.ScopeAndForm, "Scope and form"},
-        {Info.PrimaryTableInfoType.DurationOfCourse, "Duration of Course"},
-        {Info.PrimaryTableInfoType.DateOfExamination, "Date of examination"},
-        {Info.PrimaryTableInfoType.TypeOfAssessment, "Type of assessment"},
-        {Info.PrimaryTableInfoType.ExamDuration, "Exam duration"},
-        {Info.PrimaryTableInfoType.Aid, "Aid"},
-        {Info.PrimaryTableInfoType.Evaluation, "Evaluation"},
-        {Info.PrimaryTableInfoType.Responsible, "Responsible"},
-        {Info.PrimaryTableInfoType.CourseCoResponsible, "Course co-responsible"},
-        {Info.PrimaryTableInfoType.Department, "Department"},
-        {Info.PrimaryTableInfoType.HomePage, "Home page"},
-        {Info.PrimaryTableInfoType.RegistrationSignUp, "Registration Sign up"},
-        {Info.PrimaryTableInfoType.GreenChallengeParticipation, "Green challenge participation"},
-        {Info.PrimaryTableInfoType.Schedule, "Schedule"},
-        {Info.PrimaryTableInfoType.NotApplicableTogetherWith, "Not applicable together with"},
-        {Info.PrimaryTableInfoType.RecommendedPrerequisites, "Recommended prerequisites"},
-        {Info.PrimaryTableInfoType.PreviousCourse, "Previous Course"},
-        {Info.PrimaryTableInfoType.ParticipantsRestrictions, "Participants restrictions"},
-        {Info.PrimaryTableInfoType.MandatoryPrerequisites, "Mandatory Prerequisites"},
-        {Info.PrimaryTableInfoType.DepartmentInvolved, "Department involved"},
-        {Info.PrimaryTableInfoType.ExternalInstitution, "External Institution"},
+        {InfoTypePrimaryTable.DanishTitle, "Danish title"},
+        {InfoTypePrimaryTable.LanguageOfInstruction, "Language of instruction"},
+        {InfoTypePrimaryTable.Ects, "Point( ECTS )"},
+        {InfoTypePrimaryTable.CourseType, "Course type"},
+        {InfoTypePrimaryTable.Location, "Location"},
+        {InfoTypePrimaryTable.ScopeAndForm, "Scope and form"},
+        {InfoTypePrimaryTable.DurationOfCourse, "Duration of Course"},
+        {InfoTypePrimaryTable.DateOfExamination, "Date of examination"},
+        {InfoTypePrimaryTable.TypeOfAssessment, "Type of assessment"},
+        {InfoTypePrimaryTable.ExamDuration, "Exam duration"},
+        {InfoTypePrimaryTable.Aid, "Aid"},
+        {InfoTypePrimaryTable.Evaluation, "Evaluation"},
+        {InfoTypePrimaryTable.Responsible, "Responsible"},
+        {InfoTypePrimaryTable.CourseCoResponsible, "Course co-responsible"},
+        {InfoTypePrimaryTable.Department, "Department"},
+        {InfoTypePrimaryTable.HomePage, "Home page"},
+        {InfoTypePrimaryTable.RegistrationSignUp, "Registration Sign up"},
+        {InfoTypePrimaryTable.GreenChallengeParticipation, "Green challenge participation"},
+        {InfoTypePrimaryTable.Schedule, "Schedule"},
+        {InfoTypePrimaryTable.NotApplicableTogetherWith, "Not applicable together with"},
+        {InfoTypePrimaryTable.RecommendedPrerequisites, "Recommended prerequisites"},
+        {InfoTypePrimaryTable.PreviousCourse, "Previous Course"},
+        {InfoTypePrimaryTable.ParticipantsRestrictions, "Participants restrictions"},
+        {InfoTypePrimaryTable.MandatoryPrerequisites, "Mandatory Prerequisites"},
+        {InfoTypePrimaryTable.DepartmentInvolved, "Department involved"},
+        {InfoTypePrimaryTable.ExternalInstitution, "External Institution"},
     };
 
-    public static readonly Dictionary<Info.SecondaryTableInfoType, string> DtuWebsiteSecondaryTableKeysEnglish = new()
+    public static readonly Dictionary<InfoTypeSecondaryTable, string> DtuWebsiteSecondaryTableKeysEnglish = new()
     {
-        {Info.SecondaryTableInfoType.GeneralCourseObjectives, "General course objectives"},
-        {Info.SecondaryTableInfoType.LearningObjectives, "Learning objectives"},
-        {Info.SecondaryTableInfoType.Content, "Content"},
-        {Info.SecondaryTableInfoType.CourseLiterature, "CourseLiterature"},
-        {Info.SecondaryTableInfoType.Remarks, "Remarks"},
+        {InfoTypeSecondaryTable.GeneralCourseObjectives, "General course objectives"},
+        {InfoTypeSecondaryTable.LearningObjectives, "Learning objectives"},
+        {InfoTypeSecondaryTable.Content, "Content"},
+        {InfoTypeSecondaryTable.CourseLiterature, "CourseLiterature"},
+        {InfoTypeSecondaryTable.Remarks, "Remarks"},
     };
 
     public Dictionary<string, string> ParseAllTableInfo()
