@@ -8,32 +8,49 @@ public class InfoFactory
 
     public static readonly Dictionary<InfoTypeSecondaryTable,string> SecondaryTableKeys = InfoParser.DtuWebsiteSecondaryTableKeysEnglish;
 
-    public static readonly Dictionary<Info.SecondaryTableInfoType, string> DtuWebsiteSecondaryTableKeysEnglish = new()
+    private static Info CreateInfo(string tableKey, string value)
     {
-        {Info.SecondaryTableInfoType.GeneralCourseObjectives, "General course objectives"},
-        {Info.SecondaryTableInfoType.LearningObjectives, "Learning objectives"},
-        {Info.SecondaryTableInfoType.Content, "Content"},
-        {Info.SecondaryTableInfoType.CourseLiterature, "CourseLiterature"},
-        {Info.SecondaryTableInfoType.Remarks, "Remarks"},
-    };
-
-    public static Info CreateInfo(string tableKey, string value)
-    {
-        return new Info(tableKey, value);
-        var primaryTableKey = PrimaryTableKeys.FirstOrDefault(x => x.Value.Equals(tableKey)).Key;
-        if (primaryTableKey != null)
+        if (TableKeyIsValid(tableKey))
         {
-            value = PrimaryTableKeys[primaryTableKey];
+            return new Info(tableKey, value);
         }
-        var secondaryTableKey = SecondaryTableKeys.FirstOrDefault(x => x.Value.Equals(tableKey)).Key;
-        if (secondaryTableKey != null)
-        {
-            value = SecondaryTableKeys[secondaryTableKey];
-        }
+        return CreateEmpty();
     }
 
+    private static bool TableKeyIsValid(string tableKey)
+    {
+        bool primaryTableHasKey = PrimaryTableKeys.ContainsValue(tableKey);
+        bool secondaryTableHasKey = SecondaryTableKeys.ContainsValue(tableKey);
+        if (primaryTableHasKey || secondaryTableHasKey)
+        {
+            return true;
+        }
+        return false;
+    }
     public static Info CreateEmpty()
     {
         return CreateInfo(string.Empty, string.Empty);
+    }
+
+    public static Info CreatePrimaryInfo(InfoTypePrimaryTable infoType, Dictionary<string,string> InfoTableContent)
+    {
+        string tableKey = PrimaryTableKeys[infoType];
+        if (InfoTableContent.ContainsKey(tableKey))
+        {
+            string value = InfoTableContent[tableKey];
+            return CreateInfo(tableKey, value);
+        }
+        return CreateEmpty();
+    }
+
+    public static Info CreateSecondaryInfo(InfoTypeSecondaryTable infoType, Dictionary<string,string> InfoTableContent)
+    {
+        string tableKey = SecondaryTableKeys[infoType];
+        if (InfoTableContent.ContainsKey(tableKey))
+        {
+            string value = InfoTableContent[tableKey];
+            return CreateInfo(tableKey, value);
+        }
+        return CreateEmpty();
     }
 }
