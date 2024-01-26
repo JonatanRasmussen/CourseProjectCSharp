@@ -14,10 +14,4 @@ public class GradePage
         GradeStatistics = new(dataParser);
         OtherVersions = dataParser.OtherVersions;
     }
-
-    public static GradePage CreateEmpty()
-    {
-        IGradeParser setDefaultValues = new GradeDefaults();
-        return new GradePage(setDefaultValues);
-    }
 }
