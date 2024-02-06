@@ -10,7 +10,21 @@ public static class ParserUtils
     public static readonly string PatternNotFound = "ErrorString";
     public static readonly int FailedNumericConversion = -1;
 
-    public static string Get(string pattern, string html, int groupIndex)
+    public static string Get(string pattern, string html)
+    {
+        Regex regex = new Regex(pattern, RegexOptions.Singleline);
+        Match match = regex.Match(html);
+        if (match.Success)
+        {
+            return match.Groups[1].Value.Trim();
+        }
+        else
+        {
+            return PatternNotFound;
+        }
+    }
+
+    public static string GetForSpecificGroup(string pattern, string html, int groupIndex)
     {
         Regex regex = new Regex(pattern, RegexOptions.Singleline);
         Match match = regex.Match(html);
@@ -39,7 +53,22 @@ public static class ParserUtils
         return results;
     }
 
-    public static List<string> GetList(string pattern, string html, int groupIndex)
+    public static List<string> GetList(string pattern, string html)
+    {
+        List<string> results = new List<string>();
+        Regex regex = new Regex(pattern, RegexOptions.Singleline);
+        MatchCollection matches = regex.Matches(html);
+        foreach (Match match in matches)
+        {
+            if (match.Success)
+            {
+                results.Add(match.Groups[1].Value.Trim());
+            }
+        }
+        return results.Count > 0 ? results : new List<string> { PatternNotFound };
+    }
+
+    public static List<string> GetListForSpecificGroup(string pattern, string html, int groupIndex)
     {
         List<string> results = new List<string>();
         Regex regex = new Regex(pattern, RegexOptions.Singleline);
@@ -54,11 +83,18 @@ public static class ParserUtils
         return results.Count > 0 ? results : new List<string> { PatternNotFound };
     }
 
-    public static string TrimHtmlAndGet(string pattern, string html, int groupIndex)
+    public static string TrimHtmlAndGet(string pattern, string html)
     {
         string singleLineHtml = RemoveNewlines(html);
         string singleSpaceHtml = RemoveMultiSpaces(singleLineHtml);
-        return Get(pattern, singleSpaceHtml, groupIndex);
+        return Get(pattern, singleSpaceHtml);
+    }
+
+    public static string TrimHtmlAndGetForSpecificGroup(string pattern, string html, int groupIndex)
+    {
+        string singleLineHtml = RemoveNewlines(html);
+        string singleSpaceHtml = RemoveMultiSpaces(singleLineHtml);
+        return GetForSpecificGroup(pattern, singleSpaceHtml, groupIndex);
     }
 
     public static string EscapeSpecialCharacters(string input)

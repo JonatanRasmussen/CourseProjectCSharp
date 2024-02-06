@@ -31,8 +31,7 @@ public static class HtmlInfoParser
         string middle = "(.*?)";
         string end = "</td></tr>";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        string value = ParserUtils.Get(pattern, pageSource, groupIndex);
+        string value = ParserUtils.Get(pattern, pageSource);
         if (value != ParserUtils.PatternNotFound)
         {
             return value;
@@ -43,8 +42,7 @@ public static class HtmlInfoParser
             middle = "(.*?)";
             end = "\">";
             pattern = $"{start}{middle}{end}";
-            groupIndex = 1;
-            return ParserUtils.Get(pattern, pageSource, groupIndex);
+            return ParserUtils.Get(pattern, pageSource);
         }
     }
 
@@ -54,8 +52,7 @@ public static class HtmlInfoParser
         string middle = "(.*?)";
         string end = "<div class=\"bar\">";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.Get(pattern, pageSource, groupIndex);
+        return ParserUtils.Get(pattern, pageSource);
     }
 
     public static string ParseLastUpdatedInfo(string websiteKey, string pageSource)
@@ -64,8 +61,7 @@ public static class HtmlInfoParser
         string middle = "(.*?)";
         string end = "</div></div></div>";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.Get(pattern, pageSource, groupIndex);
+        return ParserUtils.Get(pattern, pageSource);
     }
 
     public static string ParseCourseIdInfo(string websiteKey, string pageSource)
@@ -74,8 +70,7 @@ public static class HtmlInfoParser
         string middle = @"(\w{5})\s";
         string end = "";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.TrimHtmlAndGet(pattern, pageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, pageSource);
     }
 
     public static string ParseCourseNameInfo(string websiteKey, string pageSource)
@@ -84,15 +79,13 @@ public static class HtmlInfoParser
         string middle =  @"\w{5}\s(.*?)";
         string end = "</h2></div>";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.TrimHtmlAndGet(pattern, pageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, pageSource);
     }
 
     public static string ParseYearInfo(string websiteKey, string pageSource)
     {
         string pattern = @"(\d{4}\/\d{4})";
-        int groupIndex = 1;
-        return ParserUtils.Get(pattern, pageSource, groupIndex);
+        return ParserUtils.Get(pattern, pageSource);
     }
 
     public static string ParseAnnouncementInfo(string websiteKey, string pageSource)
@@ -101,8 +94,7 @@ public static class HtmlInfoParser
         string middle = "(.*?)";
         string end = "</div></div><div class=\"row\">";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.TrimHtmlAndGet(pattern, pageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, pageSource);
     }
 
     public static string ParseStudyLinesInfo(string websiteKey, string pageSource)
@@ -111,8 +103,7 @@ public static class HtmlInfoParser
         string middle = "(.*?)";
         string end = ";var collectedTooltips = {};";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.TrimHtmlAndGet(pattern, pageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, pageSource);
     }
 
     public static readonly Dictionary<InfoDataPoint, Func<string, string, string>> ParserMethodMap = new()

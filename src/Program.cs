@@ -44,10 +44,22 @@ class Program
     */
     static void Main(string[] args)
     {
-        var testObject = ConcreteFactory.GetInstance((1, "example"));
-        var anotherObject = CopyConcreteFactory.GetInstance((2,"hey"));
-        Console.WriteLine($"{testObject.Str}");
-        Console.WriteLine($"{anotherObject.Str}");
+        var evaluationUrls = FetchEvaluationUrls.Execute("01005");
+        foreach (var (linkText, href) in evaluationUrls)
+        {
+            Console.WriteLine($"Link Text: {linkText}");
+            Console.WriteLine($"Href: {href}");
+            Console.WriteLine();
+        }
+        //var urlAccessStrategy = new UrlViaHttpClient();
+        //string url = "https://evaluering.dtu.dk/kursus/10603/289317";
+        //string pageSource = urlAccessStrategy.FetchPageSource(url);
+        //Console.WriteLine($"{pageSource}");
+
+        //var testObject = ConcreteFactory.GetInstance((1, "example"));
+        //var anotherObject = CopyConcreteFactory.GetInstance((2,"hey"));
+        //Console.WriteLine($"{testObject.Str}");
+        //Console.WriteLine($"{anotherObject.Str}");
     }
 }
 

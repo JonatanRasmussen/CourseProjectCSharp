@@ -27,3 +27,10 @@ c:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProje
 c:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\obj\Debug\net7.0\CourseProjectCSharp.genruntimeconfig.cache
 c:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\obj\Debug\net7.0\ref\CourseProjectCSharp.dll
 c:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\obj\Debug\net7.0\CourseProjectCSharp.sourcelink.json
+c:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\obj\Debug\net7.0\CourseProjectCSharp.csproj.AssemblyReference.cache
+C:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\bin\Debug\net7.0\selenium-manager\linux\selenium-manager
+C:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\bin\Debug\net7.0\selenium-manager\macos\selenium-manager
+C:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\bin\Debug\net7.0\selenium-manager\windows\selenium-manager.exe
+C:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\bin\Debug\net7.0\WebDriver.dll
+C:\Users\BudoB\OneDrive\Dokumenter Tekst\Programmering\CourseProject\CourseProjectCSharp\obj\Debug\net7.0\CourseProjectCSharp.csproj.CopyComplete

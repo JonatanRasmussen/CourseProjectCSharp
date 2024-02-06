@@ -1,11 +1,125 @@
 {
   "version": 3,
   "targets": {
-    "net7.0": {}
+    "net7.0": {
+      "Newtonsoft.Json/13.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Selenium.WebDriver/4.17.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/WebDriver.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/WebDriver.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/Selenium.WebDriver.targets": {}
+        }
+      },
+      "Selenium.WebDriver.ChromeDriver/121.0.6167.8500": {
+        "type": "package",
+        "build": {
+          "build/Selenium.WebDriver.ChromeDriver.targets": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Newtonsoft.Json/13.0.1": {
+      "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.1.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    },
+    "Selenium.WebDriver/4.17.0": {
+      "sha512": "wHwWPvQkgZv+k24pncPZswRdSF4AhF2bFVoF7MrY4Xw122j9L89TNGZUvdjdmscPk2XGpRK1fFQODOKopibQEw==",
+      "type": "package",
+      "path": "selenium.webdriver/4.17.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "build/Selenium.WebDriver.targets",
+        "buildTransitive/Selenium.WebDriver.targets",
+        "icon.png",
+        "lib/netstandard2.0/WebDriver.dll",
+        "lib/netstandard2.0/WebDriver.xml",
+        "manager/linux/selenium-manager",
+        "manager/macos/selenium-manager",
+        "manager/windows/selenium-manager.exe",
+        "selenium.webdriver.4.17.0.nupkg.sha512",
+        "selenium.webdriver.nuspec"
+      ]
+    },
+    "Selenium.WebDriver.ChromeDriver/121.0.6167.8500": {
+      "sha512": "vGSkTin9LkYpkG5DbTVF78tI2p4Tchw+gnzTxA6JpwLKvaf5mJrNd5TgpfpsMNg5DuI5jsc2oW0ZhrA86wY6fw==",
+      "type": "package",
+      "path": "selenium.webdriver.chromedriver/121.0.6167.8500",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "build/DefinePropertiesChromeDriver.targets",
+        "build/Selenium.WebDriver.ChromeDriver.targets",
+        "driver/linux64/LICENSE.chromedriver",
+        "driver/linux64/chromedriver",
+        "driver/mac64/LICENSE.chromedriver",
+        "driver/mac64/chromedriver",
+        "driver/mac64arm/LICENSE.chromedriver",
+        "driver/mac64arm/chromedriver",
+        "driver/win32/LICENSE.chromedriver",
+        "driver/win32/chromedriver.exe",
+        "nupkg-icon.png",
+        "selenium.webdriver.chromedriver.121.0.6167.8500.nupkg.sha512",
+        "selenium.webdriver.chromedriver.nuspec"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net7.0": []
+    "net7.0": [
+      "Selenium.WebDriver >= 4.17.0",
+      "Selenium.WebDriver.ChromeDriver >= 121.0.6167.8500"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\BudoB\\.nuget\\packages\\": {}
@@ -13,11 +127,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
+      "projectUniqueName": "C:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
       "projectName": "CourseProjectCSharp",
-      "projectPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
+      "projectPath": "C:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\CourseProjectCSharp.csproj",
       "packagesPath": "C:\\Users\\BudoB\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\obj\\",
+      "outputPath": "C:\\Users\\BudoB\\OneDrive\\Dokumenter Tekst\\Programmering\\CourseProject\\CourseProjectCSharp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\BudoB\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -43,6 +157,16 @@
     "frameworks": {
       "net7.0": {
         "targetAlias": "net7.0",
+        "dependencies": {
+          "Selenium.WebDriver": {
+            "target": "Package",
+            "version": "[4.17.0, )"
+          },
+          "Selenium.WebDriver.ChromeDriver": {
+            "target": "Package",
+            "version": "[121.0.6167.8500, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
