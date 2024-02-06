@@ -1,0 +1,77 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Text.Json;
+using System.IO;
+
+namespace CourseProject;
+
+class Program
+{
+    // Define a sample data object
+
+
+    // Function definition
+    static int AddNumbers(int a, int b) {
+        return a + b;
+    }
+
+    PersonClass person = new PersonClass("John", "Doe", 30);
+    // This is a single-line comment
+
+    /*
+    static void Main(string[] args)
+    {
+        // Reading the JSON file into a string
+        string fileName = "Type of assessment";
+        string jsonText = File.ReadAllText($"infoDictTest/{fileName}.json");
+
+        // Deserializing the JSON string into a Dictionary<string, int>
+        Dictionary<string, int> myDict = JsonSerializer.Deserialize<Dictionary<string, int>>(jsonText);
+
+        // Create a list of key-value pairs from the dictionary
+        var list = myDict.ToList();
+
+        // Sort the list by value
+        list.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+        // Print out the sorted entries
+        foreach (var pair in list)
+        {
+            Console.WriteLine($"{pair.Key} => {pair.Value}");
+        }
+    }
+    */
+    static void Main(string[] args)
+    {
+        var evaluationUrls = FetchEvaluationUrls.Execute("01005");
+        foreach (var (linkText, href) in evaluationUrls)
+        {
+            Console.WriteLine($"Link Text: {linkText}");
+            Console.WriteLine($"Href: {href}");
+            Console.WriteLine();
+        }
+        //var urlAccessStrategy = new UrlViaHttpClient();
+        //string url = "https://evaluering.dtu.dk/kursus/10603/289317";
+        //string pageSource = urlAccessStrategy.FetchPageSource(url);
+        //Console.WriteLine($"{pageSource}");
+
+        //var testObject = ConcreteFactory.GetInstance((1, "example"));
+        //var anotherObject = CopyConcreteFactory.GetInstance((2,"hey"));
+        //Console.WriteLine($"{testObject.Str}");
+        //Console.WriteLine($"{anotherObject.Str}");
+    }
+}
+
+public class PersonClass
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public int Age { get; set; }
+    public PersonClass(string firstName, string lastName, int age)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Age = age;
+    }
+}
