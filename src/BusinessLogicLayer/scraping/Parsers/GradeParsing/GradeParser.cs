@@ -47,7 +47,7 @@ public class GradeParser : IGradeParser
         string middle = "([a-zA-Z0-9]{5})";
         string end = " .*?</h2>";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseName()
@@ -56,7 +56,7 @@ public class GradeParser : IGradeParser
         string middle = "(.*?),";
         string end = " .*?</h2>";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseExamPeriod()
@@ -66,7 +66,7 @@ public class GradeParser : IGradeParser
         string end = "</h2>";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private List<string> ParseOtherVersions()
@@ -75,7 +75,7 @@ public class GradeParser : IGradeParser
         string middle = ">([sv]\\d{2})<";
         string end = "";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.GetList(pattern, PageSource, 1);
+        return ParserUtils.GetList(pattern, PageSource);
     }
 
     private string ParseLastUpdated()
@@ -84,7 +84,7 @@ public class GradeParser : IGradeParser
         string middle = "\\s*&#32;den &#32;";
         string end = "(.*?)\\s*</div>";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private List<Grade> ParseGradeList()
@@ -105,7 +105,7 @@ public class GradeParser : IGradeParser
         string middle = "<td style=\"text-align: center\">\\s*";
         string end = "(\\d+)\\s*</td>";
         string pattern = $"{start}{middle}{end}";
-        string valueStr = ParserUtils.Get(pattern, PageSource, 1);
+        string valueStr = ParserUtils.Get(pattern, PageSource);
         return ParserUtils.ConvertToInt(valueStr);
     }
 }

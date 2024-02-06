@@ -105,7 +105,7 @@ public class EvalDataPointFactory
         string end = " .*";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseCourseName()
@@ -115,7 +115,7 @@ public class EvalDataPointFactory
         string end = "[A-Z]\\d{2}";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseTerm()
@@ -125,7 +125,7 @@ public class EvalDataPointFactory
         string end = "";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseCouldRespond()
@@ -134,7 +134,7 @@ public class EvalDataPointFactory
         string middle = "(\\d+)";
         string end = " - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseDidRespond()
@@ -143,7 +143,7 @@ public class EvalDataPointFactory
         string middle = "(\\d+)";
         string end = " / \\(\\d+ - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseShouldNotRespond()
@@ -152,7 +152,7 @@ public class EvalDataPointFactory
         string middle = "(\\d+)";
         string end = "\\)";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseQuestion(string questionIndex)
@@ -174,7 +174,7 @@ public class EvalDataPointFactory
         string middle = "(.*?)";
         string end = "<div class=\"CourseSchemaResultFooter grid_6 clearmarg \">";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html);
     }
 
     private static void AddQuestionTextToDict(Dictionary<string, string> result, string isolatedHtml)
@@ -183,7 +183,7 @@ public class EvalDataPointFactory
         string middle = "(.*?)";
         string end = "</div>";
         string pattern = $"{start}{middle}{end}";
-        string questionText = ParserUtils.Get(pattern, isolatedHtml, 1);
+        string questionText = ParserUtils.Get(pattern, isolatedHtml);
         questionText = System.Net.WebUtility.HtmlDecode(questionText);
         questionText = ParserUtils.RemoveNewlines(questionText);
         result.Add("Q", questionText);
@@ -216,7 +216,7 @@ public class EvalDataPointFactory
         string middle = "(\\d+)";
         string end = " besvarelser</span>";
         string pattern = $"{start}{middle}{end}";
-        string totalResponses = ParserUtils.Get(pattern, html, 1);
+        string totalResponses = ParserUtils.Get(pattern, html);
         result.Add("Total Responses", totalResponses);
     }
 }

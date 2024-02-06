@@ -319,8 +319,7 @@ namespace CourseProject
             string middle = @"(\w{5})\s";
             string end = "";
             string pattern = $"{start}{middle}{end}";
-            int groupIndex = 1;
-            return ParserUtils.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource);
         }
 
         public string ParseCourseNameInfo()
@@ -329,15 +328,13 @@ namespace CourseProject
             string middle =  @"\w{5}\s(.*?)";
             string end = "</h2></div>";
             string pattern = $"{start}{middle}{end}";
-            int groupIndex = 1;
-            return ParserUtils.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource);
         }
 
         private string ParseYearInfo()
         {
             string pattern = @"(\d{4}\/\d{4})";
-            int groupIndex = 1;
-            return ParserUtils.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource);
         }
 
         private string ParseAnnouncementInfo()
@@ -346,8 +343,7 @@ namespace CourseProject
             string middle = "(.*?)";
             string end = "</div></div><div class=\"row\">";
             string pattern = $"{start}{middle}{end}";
-            int groupIndex = 1;
-            return ParserUtils.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource);
         }
 
         private string ParseStudyLinesInfo()
@@ -356,8 +352,7 @@ namespace CourseProject
             string middle = "(.*?)";
             string end = ";var collectedTooltips = {};";
             string pattern = $"{start}{middle}{end}";
-            int groupIndex = 1;
-            return ParserUtils.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource);
         }
 
         private string ParseInfofromMainTable(string websiteKey)
@@ -366,8 +361,7 @@ namespace CourseProject
             string middle = "(.*?)";
             string end = "</td></tr>";
             string pattern = $"{start}{middle}{end}";
-            int groupIndex = 1;
-            string value = ParserUtils.Get(pattern, PageSource, groupIndex);
+            string value = ParserUtils.Get(pattern, PageSource);
             if (value != ParserUtils.PatternNotFound)
             {
                 return value;
@@ -378,8 +372,7 @@ namespace CourseProject
                 middle = "(.*?)";
                 end = "\">";
                 pattern = $"{start}{middle}{end}";
-                groupIndex = 1;
-                return ParserUtils.Get(pattern, PageSource, groupIndex);
+                return ParserUtils.Get(pattern, PageSource);
             }
         }
 
@@ -389,8 +382,7 @@ namespace CourseProject
             string middle = "(.*?)";
             string end = "<div class=\"bar\">";
             string pattern = $"{start}{middle}{end}";
-            int groupIndex = 1;
-            return ParserUtils.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource);
         }
 
         private string ParseLastUpdatedInfo(string websiteKey)
@@ -399,8 +391,7 @@ namespace CourseProject
             string middle = "(.*?)";
             string end = "</div></div></div>";
             string pattern = $"{start}{middle}{end}";
-            int groupIndex = 1;
-            return ParserUtils.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource);
         }
     }
 }

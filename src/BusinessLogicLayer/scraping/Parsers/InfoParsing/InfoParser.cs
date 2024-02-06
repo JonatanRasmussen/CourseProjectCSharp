@@ -90,8 +90,7 @@ public class InfoParser : IInfoParser
         string middle = "(.*?)";
         string end = "</td></tr>";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        string value = ParserUtils.Get(pattern, PageSource, groupIndex);
+        string value = ParserUtils.Get(pattern, PageSource);
         if (value != ParserUtils.PatternNotFound)
         {
             return value;
@@ -102,8 +101,7 @@ public class InfoParser : IInfoParser
             middle = "(.*?)";
             end = "\">";
             pattern = $"{start}{middle}{end}";
-            groupIndex = 1;
-            return ParserUtils.Get(pattern, PageSource, groupIndex);
+            return ParserUtils.Get(pattern, PageSource);
         }
     }
 
@@ -113,8 +111,7 @@ public class InfoParser : IInfoParser
         string middle = "(.*?)";
         string end = "<div class=\"bar\">";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.Get(pattern, PageSource, groupIndex);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     public string ParseLastUpdatedInfo()
@@ -124,8 +121,7 @@ public class InfoParser : IInfoParser
         string middle = "(.*?)";
         string end = "</div></div></div>";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.Get(pattern, PageSource, groupIndex);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     public string ParseCourseIdInfo()
@@ -134,8 +130,7 @@ public class InfoParser : IInfoParser
         string middle = @"(\w{5})\s";
         string end = "";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.TrimHtmlAndGet(pattern, PageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, PageSource);
     }
 
     public string ParseCourseNameInfo()
@@ -144,15 +139,13 @@ public class InfoParser : IInfoParser
         string middle =  @"\w{5}\s(.*?)";
         string end = "</h2></div>";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.TrimHtmlAndGet(pattern, PageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, PageSource);
     }
 
     public string ParseYearInfo()
     {
         string pattern = @"(\d{4}\/\d{4})";
-        int groupIndex = 1;
-        return ParserUtils.Get(pattern, PageSource, groupIndex);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     public string ParseAnnouncementInfo()
@@ -161,8 +154,7 @@ public class InfoParser : IInfoParser
         string middle = "(.*?)";
         string end = "</div></div><div class=\"row\">";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.TrimHtmlAndGet(pattern, PageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, PageSource);
     }
 
     public string ParseStudyLinesInfo()
@@ -171,7 +163,6 @@ public class InfoParser : IInfoParser
         string middle = "(.*?)";
         string end = ";var collectedTooltips = {};";
         string pattern = $"{start}{middle}{end}";
-        int groupIndex = 1;
-        return ParserUtils.TrimHtmlAndGet(pattern, PageSource, groupIndex);
+        return ParserUtils.TrimHtmlAndGet(pattern, PageSource);
     }
 }

@@ -1,14 +1,14 @@
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+
 namespace CourseProject;
 
-public class AccessUrlByWebBrowser : IUrlAccessStrategy
+public class AccessUrlViaWebBrowser : IUrlAccessStrategy
 {
-    public string Execute(string url)
+    public string Execute(string url, int sleepDurationMilliseconds, HttpClient httpClient, IWebDriver driver)
     {
         try
         {
-            return GetPageSource(url);
+            return GetPageSource(url, sleepDurationMilliseconds, driver);
         }
         catch (Exception ex)
         {
@@ -17,16 +17,10 @@ public class AccessUrlByWebBrowser : IUrlAccessStrategy
         }
     }
 
-    static string GetPageSource(string url)
+    static string GetPageSource(string url, int sleepDurationMilliseconds, IWebDriver driver)
     {
-        ChromeOptions options = new ChromeOptions();
-        options.PageLoadStrategy = PageLoadStrategy.Normal;
-        options.AddArgument("--disable-extensions"); // Optional: Disable extensions if needed
-
-        using IWebDriver driver = new ChromeDriver(options);
-        driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(5);
         driver.Navigate().GoToUrl(url);
-        Thread.Sleep(1100); // Add delay to ensure the page has loaded completely
+        Thread.Sleep(sleepDurationMilliseconds); // Add delay to ensure the page has loaded completely
         return driver.PageSource;
     }
 }

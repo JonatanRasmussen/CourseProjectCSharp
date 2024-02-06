@@ -59,7 +59,7 @@ public class EvalParser : IEvalParser
         string end = " .*";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseName()
@@ -69,7 +69,7 @@ public class EvalParser : IEvalParser
         string end = "[A-Z]\\d{2}";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private string ParseTerm()
@@ -79,7 +79,7 @@ public class EvalParser : IEvalParser
         string end = "";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private int ParseCouldRespond()
@@ -88,7 +88,7 @@ public class EvalParser : IEvalParser
         string middle = "(\\d+)";
         string end = " - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        string valueStr = ParserUtils.Get(pattern, PageSource, 1);
+        string valueStr = ParserUtils.Get(pattern, PageSource);
         return ParserUtils.ConvertToInt(valueStr);
     }
 
@@ -98,7 +98,7 @@ public class EvalParser : IEvalParser
         string middle = "(\\d+)";
         string end = " / \\(\\d+ - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        string valueStr = ParserUtils.Get(pattern, PageSource, 1);
+        string valueStr = ParserUtils.Get(pattern, PageSource);
         return ParserUtils.ConvertToInt(valueStr);
     }
 
@@ -108,7 +108,7 @@ public class EvalParser : IEvalParser
         string middle = "(\\d+)";
         string end = "\\)";
         string pattern = $"{start}{middle}{end}";
-        string valueStr = ParserUtils.Get(pattern, PageSource, 1);
+        string valueStr = ParserUtils.Get(pattern, PageSource);
         return ParserUtils.ConvertToInt(valueStr);
     }
 
@@ -118,7 +118,7 @@ public class EvalParser : IEvalParser
         string middle = "(\\d+\\.\\s+\\w+\\s+\\d+)";
         string end = "";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, PageSource, 1);
+        return ParserUtils.Get(pattern, PageSource);
     }
 
     private List<Eval> ParseEvalList()
@@ -163,7 +163,7 @@ public class EvalParser : IEvalParser
         string middle = "(.*?)";
         string end = "<div class=\"CourseSchemaResultFooter grid_6 clearmarg \">";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html);
     }
 
     private static void AddOptionsToDict(Dictionary<string, int> result, string slicedHtml)

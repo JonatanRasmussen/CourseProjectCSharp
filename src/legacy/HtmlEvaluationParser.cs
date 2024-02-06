@@ -31,7 +31,7 @@ public static class HtmlEvaluationParser
         string end = " .*";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html);
     }
 
     public static string ParseCourseName(string placeholder, string html)
@@ -41,7 +41,7 @@ public static class HtmlEvaluationParser
         string end = "[A-Z]\\d{2}";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html);
     }
 
     public static string ParseTerm(string placeholder, string html)
@@ -51,7 +51,7 @@ public static class HtmlEvaluationParser
         string end = "";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html);
     }
 
     public static string ParseCouldRespond(string placeholder, string html)
@@ -60,7 +60,7 @@ public static class HtmlEvaluationParser
         string middle = "(\\d+)";
         string end = " - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html);
     }
 
     public static string ParseDidRespond(string placeholder, string html)
@@ -69,7 +69,7 @@ public static class HtmlEvaluationParser
         string middle = "(\\d+)";
         string end = " / \\(\\d+ - \\d+\\)";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html);
     }
 
     public static string ParseShouldNotRespond(string placeholder, string html)
@@ -78,7 +78,7 @@ public static class HtmlEvaluationParser
         string middle = "(\\d+)";
         string end = "\\)";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html);
     }
 
     public static string ParseQuestion(string questionIndex, string html)
@@ -100,7 +100,7 @@ public static class HtmlEvaluationParser
         string middle = "(.*?)";
         string end = "<div class=\"CourseSchemaResultFooter grid_6 clearmarg \">";
         string pattern = $"{start}{middle}{end}";
-        return ParserUtils.Get(pattern, html, 1);
+        return ParserUtils.Get(pattern, html);
     }
 
     public static void AddQuestionTextToDict(Dictionary<string, string> result, string isolatedHtml)
@@ -109,7 +109,7 @@ public static class HtmlEvaluationParser
         string middle = "(.*?)";
         string end = "</div>";
         string pattern = $"{start}{middle}{end}";
-        string questionText = ParserUtils.Get(pattern, isolatedHtml, 1);
+        string questionText = ParserUtils.Get(pattern, isolatedHtml);
         questionText = System.Net.WebUtility.HtmlDecode(questionText);
         questionText = ParserUtils.RemoveNewlines(questionText);
         result.Add("Q", questionText);
@@ -142,7 +142,7 @@ public static class HtmlEvaluationParser
         string middle = "(\\d+)";
         string end = " besvarelser</span>";
         string pattern = $"{start}{middle}{end}";
-        string totalResponses = ParserUtils.Get(pattern, html, 1);
+        string totalResponses = ParserUtils.Get(pattern, html);
         result.Add("Total Responses", totalResponses);
     }
 
