@@ -13,7 +13,7 @@ public class ScrapingManager
         { UrlManagement.CourseArchiveUrl, new AccessUrlViaHttpClient() },
     };
     public List<string> Urls { get; set; }
-    public Dictionary<string, string> UrlPageSources { get; set; }
+    public Dictionary<string, string> PageSources { get; set; }
     private readonly int timeOutDurationMilliseconds = 5000;
     private readonly int sleepDurationMilliseconds = 1100;
 
@@ -21,30 +21,44 @@ public class ScrapingManager
     public ScrapingManager()
     {
         Urls = new();
-        UrlPageSources = new();
+        PageSources = new();
+    }
+
+    public void ScrapeCourseArchive(AcademicYear academicYear)
+    {
+        PageSources.Clear();
+        Urls.AddRange(UrlManagement.CourseArchive(academicYear));
+        ProcessUrls();
+        CombineCourseArchive();
+        Persistence.WriteCourseHtml(PageSources, academicYear);
+        PageSources.Clear();
     }
 
     public void ProcessUrls()
     {
         using IWebDriver webDriver = InitializeWebDriver(timeOutDurationMilliseconds);
         using HttpClient httpClient = InitializeHttpClient(timeOutDurationMilliseconds);
-        foreach (var url in Urls)
+        foreach (string url in Urls)
         {
             IUrlAccessStrategy urlAccessStrategy = SelectUrlAccessStrategy(url);
             string pageSource = urlAccessStrategy.Execute(url, sleepDurationMilliseconds, httpClient, webDriver);
-            UrlPageSources[url] = pageSource;
+            PageSources[url] = pageSource;
         }
         Urls.Clear();
     }
 
     public void CombineCourseArchive()
     {
+        // DTU's Course archive cannot display all courses on one page
+        // Instead, we have a page for all courses starting with A, and B, and C, and so on
+        // This method joins all the page sources together into one big page source.
         string archiveVolumesUrl = UrlManagement.ArchiveVolumesUrl;
-        string archiveVolumesHtml = UrlPageSources[archiveVolumesUrl];
+        string archiveVolumesHtml = PageSources[archiveVolumesUrl];
         IArchiveVolumesParser archiveVolumesParser = new ArchiveVolumesParser(archiveVolumesHtml);
         List<string> yearRanges = archiveVolumesParser.YearRanges;
         foreach(string yearRange in yearRanges)
         {
+            // Join letter A, B, C, ... Z page sources for each academic year
             CombineCourseArchiveForSpecifiedYear(yearRange);
         }
     }
@@ -52,13 +66,12 @@ public class ScrapingManager
     {
         AcademicYear academicYear = AcademicYearFactory.CreateFromYearRange(yearRange);
         List<string> urls = UrlManagement.CourseArchive(academicYear);
-        string key = UrlManagement.GetUrlForSpecificVolume(academicYear);
         string value = "";
         foreach (var url in urls)
         {
-            value += UrlPageSources[url];
+            value += PageSources[url];
         }
-        UrlPageSources[key] = value;
+        PageSources[yearRange] = value;
     }
 
     private static IWebDriver InitializeWebDriver(int timeOutInSeconds)

@@ -18,7 +18,7 @@ public class AcademicYear
         EndYear = startYear + 1;
         TwoDigitStartYear = StartYear - 2000;
         TwoDigitEndYear = EndYear - 2000;
-        Name = $"{StartYear}-{EndYear}";
+        Name = $"{StartYear}-{EndYear}"; // This naming format is also used on DTU's Website
         Terms = new();
     }
 
