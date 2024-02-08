@@ -34,7 +34,7 @@ public class ScrapingManager
         PageSources.Clear();
     }
 
-    public void ProcessUrls()
+    private void ProcessUrls()
     {
         using IWebDriver webDriver = InitializeWebDriver(timeOutDurationMilliseconds);
         using HttpClient httpClient = InitializeHttpClient(timeOutDurationMilliseconds);
@@ -47,7 +47,7 @@ public class ScrapingManager
         Urls.Clear();
     }
 
-    public void CombineCourseArchive()
+    private void CombineCourseArchive()
     {
         // DTU's Course archive cannot display all courses on one page
         // Instead, we have a page for all courses starting with A, and B, and C, and so on
@@ -62,16 +62,17 @@ public class ScrapingManager
             CombineCourseArchiveForSpecifiedYear(yearRange);
         }
     }
-    public void CombineCourseArchiveForSpecifiedYear(string yearRange)
+    private void CombineCourseArchiveForSpecifiedYear(string yearRange)
     {
         AcademicYear academicYear = AcademicYearFactory.CreateFromYearRange(yearRange);
         List<string> urls = UrlManagement.CourseArchive(academicYear);
+        string key = UrlManagement.GetUrlForSpecificVolume(academicYear);
         string value = "";
         foreach (var url in urls)
         {
             value += PageSources[url];
         }
-        PageSources[yearRange] = value;
+        PageSources[key] = value;
     }
 
     private static IWebDriver InitializeWebDriver(int timeOutInSeconds)

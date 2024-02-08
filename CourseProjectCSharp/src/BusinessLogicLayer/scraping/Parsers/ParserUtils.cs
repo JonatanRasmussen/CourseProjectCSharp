@@ -83,6 +83,19 @@ public static class ParserUtils
         return results.Count > 0 ? results : new List<string> { PatternNotFound };
     }
 
+    public static Dictionary<string, string> GetDictionary(string pattern, string html)
+    {
+        Dictionary<string, string> dict = new();
+        MatchCollection matches = Regex.Matches(html, pattern);
+        foreach (Match match in matches.Cast<Match>())
+        {
+            string courseId = match.Groups[1].Value;
+            string courseTitle = match.Groups[2].Value;
+            dict.Add(courseId, courseTitle);
+        }
+        return dict;
+    }
+
     public static string TrimHtmlAndGet(string pattern, string html)
     {
         string singleLineHtml = RemoveNewlines(html);
