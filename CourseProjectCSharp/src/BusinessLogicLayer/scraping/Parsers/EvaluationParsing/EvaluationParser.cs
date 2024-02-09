@@ -85,7 +85,6 @@ public class EvalParser : IEvalParser
         string pattern = $"{start}{middle}{end}";
 
         string result = ParserUtils.Get(pattern, PageSource);
-        Console.WriteLine(result);
 
         if (!string.IsNullOrEmpty(result) && result.Length >= 3)
         {
