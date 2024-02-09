@@ -10,44 +10,97 @@ public class Persistence
     private readonly Dictionary<string, Dictionary<string, string>> fileContentCache = new();
     public readonly string ScrapedHtmlFolder = "database/html/";
 
-    public string GetCourseHtml(AcademicYear year)
+    public List<string> GetArchiveVolumesList()
     {
-        Dictionary<string, string> htmlDictionary = GetOrReadCourseJson(() => OpenCourseHtmlJson(year), year);
-        if (htmlDictionary.TryGetValue(year.Name, out string? value))
+        var htmlDictionary = GetArchiveVolumesHtml();
+        string url = UrlManagement.GetUrlForArchiveVolumes();
+        string html = string.Empty;
+        string key = url;
+        if (htmlDictionary.TryGetValue(key, out string? value))
         {
-            return value;
+            html = value;
         }
-        throw new KeyNotFoundException($"Key '{year.Name}' does not exist in {CourseFileName(year)}.");
+        ArchiveVolumesParser parser = new(html, key);
+        return parser.YearRanges;
     }
 
-    public string GetEvalHtml(Term term, string courseCode)
+    public List<string> GetCourseList(AcademicYear year)
     {
-        Dictionary<string, string> htmlDictionary = GetOrReadEvalJson(() => OpenEvalHtmlJson(term), term);
-        if (htmlDictionary.TryGetValue(courseCode, out string? value))
+        var htmlDictionary = GetCourseHtml(year);
+        string url = UrlManagement.GetUrlForSpecificVolume(year);
+        string html = string.Empty;
+        string key = url;
+        if (htmlDictionary.TryGetValue(key, out string? value))
         {
-            return value;
+            html = value;
         }
-        throw new KeyNotFoundException($"Key '{courseCode}' does not exist in {EvalFileName(term)}.");
+        CourseArchiveParser parser = new(html, key);
+        return parser.CourseList;
     }
 
-    public string GetGradeHtml(Term term, string courseCode)
+    public EvalPage GetEvalPage(Term term, string courseCode)
     {
-        Dictionary<string, string> htmlDictionary = GetOrReadGradeJson(() => OpenGradeHtmlJson(term), term);
-        if (htmlDictionary.TryGetValue(courseCode, out string? value))
+        var htmlDictionary = GetEvalHtml(term);
+        string url = UrlManagement.GetCourseEvalUrl(term, courseCode);
+        string html = string.Empty;
+        string key = url;
+        if (htmlDictionary.TryGetValue(key, out string? value))
         {
-            return value;
+            html = value;
         }
-        throw new KeyNotFoundException($"Key '{courseCode}' does not exist in {GradeFileName(term)}.");
+        EvalParser parser = new(html, key);
+        EvalPage page = EvalPageFactory.Create(parser);
+        return page;
     }
 
-    public string GetInfoHtml(AcademicYear year, string courseCode)
+    public GradePage GetGradePage(Term term, string courseCode)
     {
-        Dictionary<string, string> htmlDictionary = GetOrReadInfoJson(() => OpenInfoHtmlJson(year), year);
-        if (htmlDictionary.TryGetValue(courseCode, out string? value))
+        var htmlDictionary = GetGradeHtml(term);
+        string url = UrlManagement.GetCourseGradeUrl(term, courseCode);
+        string html = string.Empty;
+        string key = url;
+        if (htmlDictionary.TryGetValue(key, out string? value))
         {
-            return value;
+            html = value;
         }
-        throw new KeyNotFoundException($"Key '{courseCode}' does not exist in {InfoFileName(year)}.");
+        GradeParser parser = new(html, key);
+        GradePage page = GradePageFactory.Create(parser);
+        return page;
+    }
+
+    public InfoPage GetInfoPage(AcademicYear year, string courseCode)
+    {
+        var htmlDictionary = GetInfoHtml(year);
+        string url = UrlManagement.GetCourseInfoUrl(year, courseCode);
+        string html = string.Empty;
+        string key = url;
+        if (htmlDictionary.TryGetValue(key, out string? value))
+        {
+            html = value;
+        }
+        InfoParser parser = new(html, key);
+        InfoPage page = InfoPageFactory.Create(parser);
+        return page;
+    }
+
+    public Dictionary<string,string> GetEvalUrls ()
+    {
+        var htmlDictionary = GetHrefDigitsHtml();
+        string url = UrlManagement.GetUrlForHrefDigits();
+        string html = string.Empty;
+        string key = url;
+        if (htmlDictionary.TryGetValue(key, out string? value))
+        {
+            html = value;
+        }
+        EvalUrlSearch parser = new(html, key);
+        return parser.EvalUrlDictionary;
+    }
+
+    public static void WriteArchiveVolumesHtml(Dictionary<string, string> dict)
+    {
+        string filePath = ArchiveVolumesFileName();
+        WriteJson(filePath, dict);
     }
 
     public static void WriteCourseHtml(Dictionary<string, string> dict, AcademicYear year)
@@ -74,6 +127,47 @@ public class Persistence
         WriteJson(filePath, dict);
     }
 
+    public static void WriteHrefDigitsHtml(Dictionary<string, string> dict)
+    {
+        string filePath = HrefDigitsFileName();
+        WriteJson(filePath, dict);
+    }
+
+    private Dictionary<string, string> GetArchiveVolumesHtml()
+    {
+        return GetOrReadArchiveVolumesJson(() => OpenArchiveVolumesHtmlJson());
+    }
+
+    private Dictionary<string, string> GetCourseHtml(AcademicYear year)
+    {
+        return GetOrReadCourseJson(() => OpenCourseHtmlJson(year), year);
+    }
+
+    private Dictionary<string, string> GetEvalHtml(Term term)
+    {
+        return GetOrReadEvalJson(() => OpenEvalHtmlJson(term), term);
+    }
+
+    private Dictionary<string, string> GetGradeHtml(Term term)
+    {
+        return GetOrReadGradeJson(() => OpenGradeHtmlJson(term), term);
+    }
+
+    private Dictionary<string, string> GetInfoHtml(AcademicYear year)
+    {
+        return GetOrReadInfoJson(() => OpenInfoHtmlJson(year), year);
+    }
+
+    private Dictionary<string, string> GetHrefDigitsHtml()
+    {
+        return GetOrReadHrefDigitsJson(() => OpenHrefDigitsHtmlJson());
+    }
+
+    private Dictionary<string, string> GetOrReadArchiveVolumesJson(Func<Dictionary<string, string>> jsonOpener)
+    {
+        string filePath = $"{ScrapedHtmlFolder}{ArchiveVolumesFileName()}";
+        return GetOrReadJsonInternal(jsonOpener, filePath);
+    }
 
     private Dictionary<string, string> GetOrReadCourseJson(Func<Dictionary<string, string>> jsonOpener, AcademicYear year)
     {
@@ -99,6 +193,12 @@ public class Persistence
         return GetOrReadJsonInternal(jsonOpener, filePath);
     }
 
+    private Dictionary<string, string> GetOrReadHrefDigitsJson(Func<Dictionary<string, string>> jsonOpener)
+    {
+        string filePath = $"{ScrapedHtmlFolder}{HrefDigitsFileName()}";
+        return GetOrReadJsonInternal(jsonOpener, filePath);
+    }
+
     private Dictionary<string, string> GetOrReadJsonInternal(Func<Dictionary<string, string>> jsonOpener, string filePath)
     {
         lock (fileContentCache)
@@ -112,6 +212,12 @@ public class Persistence
             fileContentCache[filePath] = content;
             return content;
         }
+    }
+
+    private Dictionary<string, string> OpenArchiveVolumesHtmlJson()
+    {
+        string filePath = $"{ScrapedHtmlFolder}{ArchiveVolumesFileName()}";
+        return ReadJson(filePath);
     }
 
     private Dictionary<string, string> OpenCourseHtmlJson(AcademicYear year)
@@ -135,6 +241,12 @@ public class Persistence
     private Dictionary<string, string> OpenInfoHtmlJson(AcademicYear year)
     {
         string filePath = $"{ScrapedHtmlFolder}{InfoFileName(year)}";
+        return ReadJson(filePath);
+    }
+
+    private Dictionary<string, string> OpenHrefDigitsHtmlJson()
+    {
+        string filePath = $"{ScrapedHtmlFolder}{HrefDigitsFileName()}";
         return ReadJson(filePath);
     }
 
@@ -163,6 +275,11 @@ public class Persistence
         }
     }
 
+    private static string ArchiveVolumesFileName()
+    {
+        return $"volumes.json";
+    }
+
     private static string CourseFileName(AcademicYear year)
     {
         return $"{year.Name}__courses.json";
@@ -181,5 +298,10 @@ public class Persistence
     private static string InfoFileName(AcademicYear year)
     {
         return $"{year.Name}__info.json";
+    }
+
+    private static string HrefDigitsFileName()
+    {
+        return $"hrefDigits.json";
     }
 }

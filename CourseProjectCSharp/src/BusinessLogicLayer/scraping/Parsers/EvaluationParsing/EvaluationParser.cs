@@ -56,7 +56,7 @@ public class EvalParser : IEvalParser
     {
         string start = "Resultater : ";
         string middle = "([a-zA-Z0-9]{5})";
-        string end = " .*";
+        string end = ".*";
         string pattern = $"{start}{middle}{end}";
 
         return ParserUtils.Get(pattern, PageSource);
@@ -64,22 +64,48 @@ public class EvalParser : IEvalParser
 
     private string ParseName()
     {
-        string start = "Resultater : [A-Z0-9]{5} ";
-        string middle = "(.*?) ";
-        string end = "[A-Z]\\d{2}";
+        string start = "Resultater : ";
+        string middle = "[a-zA-Z0-9]{5} (.*?)";
+        string end = "</h2>";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, PageSource);
+        string result = ParserUtils.Get(pattern, PageSource);
+        string term = ParseTerm();
+        // Remove the term from the result so that only the course name is remaining
+        string name = result.Replace(term, "").Trim();
+        return name;
     }
 
     private string ParseTerm()
     {
-        string start = "Resultater : [A-Z0-9]{5} .* ";
-        string middle = "([A-Z]\\d{2})";
-        string end = "";
+        // Can be either "E22", "F22", "Jan 22", "Jun 22", "Jul 22" or "Aug 22"
+        string start = "Resultater : ";
+        string middle = "[a-zA-Z0-9]{5} (.*?)";
+        string end = "</h2>";
         string pattern = $"{start}{middle}{end}";
 
-        return ParserUtils.Get(pattern, PageSource);
+        string result = ParserUtils.Get(pattern, PageSource);
+        Console.WriteLine(result);
+
+        if (!string.IsNullOrEmpty(result) && result.Length >= 3)
+        {
+            // Format can be "E22", "F22", "Jan 22", "Jun 22", "Jul 22" or "Aug 22"
+            // If the third-last char is a whitespace, it is Jan/Jun/Jul/Aug and should be converted to "E" or "F"
+            if (result[^3] == ' ')
+            {
+                string termEvalFormat = result.Substring(result.Length - 6);
+                termEvalFormat = termEvalFormat.Replace("Jan ", "E");
+                termEvalFormat = termEvalFormat.Replace("Jun ", "F");
+                termEvalFormat = termEvalFormat.Replace("Jul ", "F");
+                termEvalFormat = termEvalFormat.Replace("Aug ", "F");
+                return termEvalFormat;
+            }
+            else
+            {
+                return result.Substring(result.Length - 3);
+            }
+        }
+        return string.Empty;
     }
 
     private int ParseCouldRespond()

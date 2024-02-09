@@ -36,7 +36,7 @@ public class MyTests
     public void MyTest3()
     {
         // Arrange
-        PersonClass person = new("hey","hey",30);
+        PersonTestClass person = new("hey","hey",30);
 
         // Assert
         Assert.Equal(30, person.Age);
@@ -46,7 +46,7 @@ public class MyTests
     public void MyTest4()
     {
         // Arrange
-        PersonClass person = new("hey","hey",30);
+        PersonTestClass person = new("hey","hey",30);
 
         // Assert
         Assert.Equal(30, person.Age);

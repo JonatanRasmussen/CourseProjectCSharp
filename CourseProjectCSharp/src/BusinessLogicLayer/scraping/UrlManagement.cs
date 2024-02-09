@@ -7,7 +7,7 @@ public static class UrlManagement
     public static readonly string CourseBaseUrl = "https://kurser.dtu.dk/course/";
     public static readonly string GradesUrl = "https://karakterer.dtu.dk/Histogram/";
     public static readonly string EvaluationsUrl = "https://evaluering.dtu.dk/kursus/";
-    public static readonly string EvaluationsSearchUrl = "https://evaluering.dtu.dk/CourseSearch";
+    public static readonly string EvaluationsHrefDigitsUrl = "https://evaluering.dtu.dk/CourseSearch";
     public static readonly string CourseArchiveUrl = "https://kurser.dtu.dk/archive";
     public static readonly string ArchiveVolumesUrl = "https://kurser.dtu.dk/archive/volumes";
 
@@ -16,7 +16,23 @@ public static class UrlManagement
         return $"{CourseArchiveUrl}/{academicYear}";
     }
 
-    public static List<string> CourseArchive(AcademicYear academicYear)
+    public static string GetUrlForArchiveVolumes()
+    {
+        return ArchiveVolumesUrl;
+    }
+
+    public static string GetUrlForHrefDigits()
+    {
+        return EvaluationsHrefDigitsUrl;
+    }
+
+    public static string GetKeyForEvalUrls(string termCode, string courseCode)
+    {
+        Term term = TermFactory.CreateFromTermCode(termCode);
+        return $"{term.Name}__{courseCode}";
+    }
+
+    public static List<string> GetCourseArchiveUrls(AcademicYear academicYear)
     {
         // Deterministically generate a list of URLs that cover the full course archive for a given academic year.
         // The course list is split across several URLs, one per starting letter.
@@ -39,5 +55,31 @@ public static class UrlManagement
             Urls.Add(fullUrl);
         }
         return Urls;
+    }
+
+    public static string GetCourseEvalUrl(Term term, string courseCode)
+    {
+        Dictionary<string, string> evalUrls = Persistence.Instance.GetEvalUrls();
+        string key = GetKeyForEvalUrls(term.Name, courseCode);
+        return evalUrls[key];
+    }
+
+    public static string GetCourseGradeUrl(Term term, string courseCode)
+    {
+        string examPeriod = string.Empty;
+        if (term.Semester == DtuSemesterType.Spring)
+        {
+            examPeriod = $"Summer-{term.AcademicYear.EndYear}";
+        }
+        else if (term.Semester == DtuSemesterType.Autumn)
+        {
+            examPeriod = $"Winter-{term.AcademicYear.StartYear}";
+        }
+        return $"{GradesUrl}1/{courseCode}/{examPeriod}";
+    }
+
+    public static string GetCourseInfoUrl(AcademicYear academicYear, string courseCode)
+    {
+        return $"{CourseBaseUrl}{academicYear.Name}/{courseCode}";
     }
 }

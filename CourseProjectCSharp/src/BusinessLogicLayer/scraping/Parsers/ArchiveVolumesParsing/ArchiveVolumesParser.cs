@@ -6,10 +6,12 @@ public class ArchiveVolumesParser : IArchiveVolumesParser
 {
     private string PageSource { get; }
     public List<string> YearRanges { get; }
+    public string Url { get; }
 
-    public ArchiveVolumesParser(string html)
+    public ArchiveVolumesParser(string html, string url)
     {
         PageSource = html;
+        Url = url;
         YearRanges = ParseYearRanges();
     }
 

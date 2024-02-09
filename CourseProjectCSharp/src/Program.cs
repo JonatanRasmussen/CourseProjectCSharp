@@ -3,53 +3,91 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.IO;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using Newtonsoft.Json;
 
 namespace CourseProject;
 
 class Program
 {
-    // Define a sample data object
-
-
-    // Function definition
-    static int AddNumbers(int a, int b) {
-        return a + b;
-    }
-
-    PersonClass person = new PersonClass("John", "Doe", 30);
-    // This is a single-line comment
-
-    /*
-    static void Main(string[] args)
+    public static Dictionary<string,string> Execute(string courseCode, int sleepDurationMilliseconds, IWebDriver driver)
     {
-        // Reading the JSON file into a string
-        string fileName = "Type of assessment";
-        string jsonText = File.ReadAllText($"infoDictTest/{fileName}.json");
+        string URL = "https://evaluering.dtu.dk/CourseSearch";
+        string COURSE_INPUT = "//*[@id='CourseCodeTextbox']";
+        string SEARCH_SUBMIT = "//*[@id='SearchButton']";
+        Dictionary<string, string> evaluationUrls = new();
+        driver.Navigate().GoToUrl(URL);
+        driver.FindElement(By.XPath(COURSE_INPUT)).SendKeys(courseCode);
+        driver.FindElement(By.XPath(SEARCH_SUBMIT)).Click();
+        Thread.Sleep(sleepDurationMilliseconds);
 
-        // Deserializing the JSON string into a Dictionary<string, int>
-        Dictionary<string, int> myDict = JsonSerializer.Deserialize<Dictionary<string, int>>(jsonText);
-
-        // Create a list of key-value pairs from the dictionary
-        var list = myDict.ToList();
-
-        // Sort the list by value
-        list.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
-
-        // Print out the sorted entries
-        foreach (var pair in list)
+        // If only 1 evaluation exists, the driver is automatically redirected to it
+        // Which means that instead of search results, we get an evaluation page.
+        // The parser is set up to handle this special case, so be careful with modifications to this code
+        if (driver.Url.StartsWith(UrlManagement.EvaluationsUrl))
         {
-            Console.WriteLine($"{pair.Key} => {pair.Value}");
+            // Parse redirected eval page
+            EvalParser parser = new(driver.PageSource, driver.Url);
+            string key = $"{parser.TermCode}__{parser.ID}";
+            string value = driver.Url;
+            evaluationUrls[key] = value;
         }
+        else
+        {
+            // Parse search results
+            var links = driver.FindElements(By.TagName("a"));
+            foreach (var link in links)
+            {
+                var href = link.GetAttribute("href");
+                var linkText = link.Text;
+                if (!string.IsNullOrEmpty(href) && href.Length >= 33 && href[..33] == "https://evaluering.dtu.dk/kursus/")
+                {
+                    var parsedLinkText = ModifyLinkText(linkText);
+                    evaluationUrls[parsedLinkText] = href;
+                }
+            }
+        }
+        // Scuffed string-convertion to match the return type specified by the interface.
+        // A deserialization happens in the parser.
+        return evaluationUrls;
     }
-    */
+
+    private static string ModifyLinkText(string linkText)
+    {
+        string courseCode = string.Empty;
+        string termCode = $"{linkText[0]}{linkText[2]}{linkText[3]}";
+        string[] linkTextComponents = linkText.Split(' ');
+        if (linkTextComponents.Length >= 2)
+        {
+            courseCode = linkTextComponents[1];
+        }
+        return $"{termCode}__{courseCode}";
+    }
+
+    private static IWebDriver InitializeWebDriver(int timeOutInSeconds)
+    {
+        ChromeOptions options = new()
+        {
+            PageLoadStrategy = PageLoadStrategy.Normal
+        };
+        options.AddArgument("--disable-extensions");
+        IWebDriver driver = new ChromeDriver(options);
+        driver.Manage().Timeouts().PageLoad = TimeSpan.FromMilliseconds(timeOutInSeconds);
+        return driver;
+    }
+
     static void Main(string[] args)
     {
-        var evaluationUrls = FetchEvaluationUrls.Execute("01005");
-        foreach (var (linkText, href) in evaluationUrls)
+        using (IWebDriver webDriver = InitializeWebDriver(5000))
         {
-            Console.WriteLine($"Link Text: {linkText}");
-            Console.WriteLine($"Href: {href}");
-            Console.WriteLine();
+            Dictionary<string,string> pageSource = Execute("02977", 5000, webDriver);
+            foreach (var (key, value) in pageSource)
+            {
+                Console.WriteLine($"Link Text: {key}");
+                Console.WriteLine($"Href: {value}");
+                Console.WriteLine();
+            }
         }
         //var urlAccessStrategy = new UrlViaHttpClient();
         //string url = "https://evaluering.dtu.dk/kursus/10603/289317";
@@ -63,12 +101,12 @@ class Program
     }
 }
 
-public class PersonClass
+public class PersonTestClass
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public int Age { get; set; }
-    public PersonClass(string firstName, string lastName, int age)
+    public PersonTestClass(string firstName, string lastName, int age)
     {
         FirstName = firstName;
         LastName = lastName;

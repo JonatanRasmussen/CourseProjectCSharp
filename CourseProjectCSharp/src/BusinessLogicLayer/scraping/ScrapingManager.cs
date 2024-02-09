@@ -9,7 +9,7 @@ public class ScrapingManager
         { UrlManagement.CourseBaseUrl, new AccessUrlViaWebBrowser() },
         { UrlManagement.GradesUrl, new AccessUrlViaHttpClient() },
         { UrlManagement.EvaluationsUrl, new AccessUrlViaHttpClient() },
-        { UrlManagement.EvaluationsSearchUrl, new AccessUrlViaHttpClient() },
+        { UrlManagement.EvaluationsHrefDigitsUrl, new FetchEvaluationUrls() },
         { UrlManagement.CourseArchiveUrl, new AccessUrlViaHttpClient() },
     };
     public List<string> Urls { get; set; }
@@ -24,13 +24,100 @@ public class ScrapingManager
         PageSources = new();
     }
 
+    public void ScrapeAll()
+    {
+        ScrapeArchiveVolumes();
+        var volumes = Persistence.Instance.GetArchiveVolumesList();
+        foreach (string volume in volumes)
+        {
+            var academicYear = AcademicYearFactory.CreateFromYearRange(volume);
+            ScrapeAllForYear(academicYear);
+        }
+    }
+
+    public void ScrapeAllForYear(AcademicYear academicYear)
+    {
+        ScrapeCourseArchive(academicYear);
+        ScrapeInfo(academicYear);
+        ScrapeEvalUrlSearch(academicYear);
+        foreach (Term term in academicYear.Terms)
+        {
+            ScrapeEvals(term);
+            ScrapeGrades(term);
+        }
+    }
+
+    public void ScrapeArchiveVolumes()
+    {
+        PageSources.Clear();
+        Urls.Add(UrlManagement.ArchiveVolumesUrl);
+        ProcessUrls();
+        Persistence.WriteArchiveVolumesHtml(PageSources);
+        PageSources.Clear();
+    }
+
     public void ScrapeCourseArchive(AcademicYear academicYear)
     {
         PageSources.Clear();
-        Urls.AddRange(UrlManagement.CourseArchive(academicYear));
+        Urls.AddRange(UrlManagement.GetCourseArchiveUrls(academicYear));
         ProcessUrls();
         CombineCourseArchive();
         Persistence.WriteCourseHtml(PageSources, academicYear);
+        PageSources.Clear();
+    }
+
+    public void ScrapeEvals(Term term)
+    {
+        PageSources.Clear();
+        List<string> courseList = Persistence.Instance.GetCourseList(term.AcademicYear);
+        foreach (string courseCode in courseList)
+        {
+            string url = UrlManagement.GetCourseEvalUrl(term, courseCode);
+            Urls.Add(url);
+        }
+        ProcessUrls();
+        Persistence.WriteEvalHtml(PageSources, term);
+        PageSources.Clear();
+    }
+
+    public void ScrapeGrades(Term term)
+    {
+        PageSources.Clear();
+        List<string> courseList = Persistence.Instance.GetCourseList(term.AcademicYear);
+        foreach (string courseCode in courseList)
+        {
+            string url = UrlManagement.GetCourseGradeUrl(term, courseCode);
+            Urls.Add(url);
+        }
+        ProcessUrls();
+        Persistence.WriteGradeHtml(PageSources, term);
+        PageSources.Clear();
+    }
+
+    public void ScrapeInfo(AcademicYear academicYear)
+    {
+        PageSources.Clear();
+        List<string> courseList = Persistence.Instance.GetCourseList(academicYear);
+        foreach (string courseCode in courseList)
+        {
+            string url = UrlManagement.GetCourseInfoUrl(academicYear, courseCode);
+            Urls.Add(url);
+        }
+        ProcessUrls();
+        Persistence.WriteInfoHtml(PageSources, academicYear);
+        PageSources.Clear();
+    }
+
+    public void ScrapeEvalUrlSearch(AcademicYear academicYear)
+    {
+        PageSources.Clear();
+        List<string> courseList = Persistence.Instance.GetCourseList(academicYear);
+        foreach (string courseCode in courseList)
+        {
+            Urls.Add(courseCode);
+        }
+        ProcessUrls();
+        Persistence.WriteHrefDigitsHtml(PageSources);
         PageSources.Clear();
     }
 
@@ -54,7 +141,8 @@ public class ScrapingManager
         // This method joins all the page sources together into one big page source.
         string archiveVolumesUrl = UrlManagement.ArchiveVolumesUrl;
         string archiveVolumesHtml = PageSources[archiveVolumesUrl];
-        IArchiveVolumesParser archiveVolumesParser = new ArchiveVolumesParser(archiveVolumesHtml);
+        string url = UrlManagement.GetUrlForArchiveVolumes();
+        ArchiveVolumesParser archiveVolumesParser = new(archiveVolumesHtml, url);
         List<string> yearRanges = archiveVolumesParser.YearRanges;
         foreach(string yearRange in yearRanges)
         {
@@ -65,7 +153,7 @@ public class ScrapingManager
     private void CombineCourseArchiveForSpecifiedYear(string yearRange)
     {
         AcademicYear academicYear = AcademicYearFactory.CreateFromYearRange(yearRange);
-        List<string> urls = UrlManagement.CourseArchive(academicYear);
+        List<string> urls = UrlManagement.GetCourseArchiveUrls(academicYear);
         string key = UrlManagement.GetUrlForSpecificVolume(academicYear);
         string value = "";
         foreach (var url in urls)
@@ -98,7 +186,11 @@ public class ScrapingManager
     {
         foreach (var domainStrategyPair in DomainStrategyTable)
         {
-            if (url.StartsWith(domainStrategyPair.Key, StringComparison.OrdinalIgnoreCase))
+            if (url.Length == 5) // Special case for EvalUrlSearch
+            {
+                return DomainStrategyTable[UrlManagement.EvaluationsHrefDigitsUrl];
+            }
+            else if (url.StartsWith(domainStrategyPair.Key, StringComparison.OrdinalIgnoreCase))
             {
                 return domainStrategyPair.Value;
             }
