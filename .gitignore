@@ -60,5 +60,7 @@ CourseProjectTests/bin/
 CourseProjectTests/obj/
 bin/
 obj/
+database/
+db/
 
 # Misc

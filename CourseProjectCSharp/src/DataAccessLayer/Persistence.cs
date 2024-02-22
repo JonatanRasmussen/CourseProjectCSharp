@@ -8,7 +8,7 @@ public class Persistence
     private static readonly Persistence instance = new(); // Singleton instance of the class.
     public static Persistence Instance => instance; // Public access to the Singleton
     private readonly Dictionary<string, Dictionary<string, string>> fileContentCache = new();
-    public readonly string ScrapedHtmlFolder = "database/html/";
+    public static readonly string ScrapedHtmlFolder = "database\\html\\";
 
     public List<string> GetArchiveVolumesList()
     {
@@ -216,44 +216,46 @@ public class Persistence
 
     private Dictionary<string, string> OpenArchiveVolumesHtmlJson()
     {
-        string filePath = $"{ScrapedHtmlFolder}{ArchiveVolumesFileName()}";
+        string filePath = ArchiveVolumesFileName();
         return ReadJson(filePath);
     }
 
     private Dictionary<string, string> OpenCourseHtmlJson(AcademicYear year)
     {
-        string filePath = $"{ScrapedHtmlFolder}{CourseFileName(year)}";
+        string filePath = CourseFileName(year);
         return ReadJson(filePath);
     }
 
     private Dictionary<string, string> OpenEvalHtmlJson(Term term)
     {
-        string filePath = $"{ScrapedHtmlFolder}{EvalFileName(term)}";
+        string filePath = EvalFileName(term);
         return ReadJson(filePath);
     }
 
     private Dictionary<string, string> OpenGradeHtmlJson(Term term)
     {
-        string filePath = $"{ScrapedHtmlFolder}{GradeFileName(term)}";
+        string filePath = GradeFileName(term);
         return ReadJson(filePath);
     }
 
     private Dictionary<string, string> OpenInfoHtmlJson(AcademicYear year)
     {
-        string filePath = $"{ScrapedHtmlFolder}{InfoFileName(year)}";
+        string filePath = InfoFileName(year);
         return ReadJson(filePath);
     }
 
     private Dictionary<string, string> OpenHrefDigitsHtmlJson()
     {
-        string filePath = $"{ScrapedHtmlFolder}{HrefDigitsFileName()}";
+        string filePath = HrefDigitsFileName();
         return ReadJson(filePath);
     }
 
     private static Dictionary<string, string> ReadJson(string filePath)
     {
+        string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        string fullPath = Path.GetFullPath(Path.Combine(baseDirectory, "..\\..\\..\\..", filePath));
         Dictionary<string, string>? jsonDict;
-        jsonDict = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText($"{filePath}.json"));
+        jsonDict = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(fullPath));
         if (jsonDict == null)
         {
             throw new NullReferenceException($"Null reference for '{filePath}'");
@@ -265,9 +267,11 @@ public class Persistence
     {
         try
         {
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string fullPath = Path.GetFullPath(Path.Combine(baseDirectory, "..\\..\\..\\..", filePath));
             JsonSerializerOptions options = new() { WriteIndented = true };
             string json = JsonSerializer.Serialize(dict, options);
-            File.WriteAllText($"{filePath}", json);
+            File.WriteAllText(fullPath, json);
         }
         catch (Exception ex)
         {
@@ -277,31 +281,31 @@ public class Persistence
 
     private static string ArchiveVolumesFileName()
     {
-        return $"volumes.json";
+        return $"{ScrapedHtmlFolder}volumes.json";
     }
 
     private static string CourseFileName(AcademicYear year)
     {
-        return $"{year.Name}__courses.json";
+        return $"{ScrapedHtmlFolder}{year.Name}__courses.json";
     }
 
     private static string EvalFileName(Term term)
     {
-        return $"{term.Name}__evals.json";
+        return $"{ScrapedHtmlFolder}{term.Name}__evals.json";
     }
 
     private static string GradeFileName(Term term)
     {
-        return $"{term.Name}__grades.json";
+        return $"{ScrapedHtmlFolder}{term.Name}__grades.json";
     }
 
     private static string InfoFileName(AcademicYear year)
     {
-        return $"{year.Name}__info.json";
+        return $"{ScrapedHtmlFolder}{year.Name}__info.json";
     }
 
     private static string HrefDigitsFileName()
     {
-        return $"hrefDigits.json";
+        return $"{ScrapedHtmlFolder}hrefDigits.json";
     }
 }

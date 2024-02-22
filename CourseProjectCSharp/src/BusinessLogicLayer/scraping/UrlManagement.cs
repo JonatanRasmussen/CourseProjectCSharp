@@ -13,7 +13,7 @@ public static class UrlManagement
 
     public static string GetUrlForSpecificVolume(AcademicYear academicYear)
     {
-        return $"{CourseArchiveUrl}/{academicYear}";
+        return $"{CourseArchiveUrl}/{academicYear.Name}";
     }
 
     public static string GetUrlForArchiveVolumes()
@@ -37,7 +37,6 @@ public static class UrlManagement
         // Deterministically generate a list of URLs that cover the full course archive for a given academic year.
         // The course list is split across several URLs, one per starting letter.
         // Example URL: https://kurser.dtu.dk/archive/2022-2023/letter/A
-        const string UrlHostname = "https://kurser.dtu.dk";
         List<string> Alphabet = new()
         {
             "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
@@ -51,8 +50,7 @@ public static class UrlManagement
         foreach (string character in Alphabet)
         {
             string urlPath = $"{GetUrlForSpecificVolume(academicYear)}/letter/{character}";
-            string fullUrl = UrlHostname + urlPath;
-            Urls.Add(fullUrl);
+            Urls.Add(urlPath);
         }
         return Urls;
     }

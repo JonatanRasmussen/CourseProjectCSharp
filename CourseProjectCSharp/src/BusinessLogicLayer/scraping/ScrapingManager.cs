@@ -24,20 +24,26 @@ public class ScrapingManager
         PageSources = new();
     }
 
-    public void ScrapeAll()
+    public void ScrapeAll(string oldestYearRangeToScrape)
     {
         ScrapeArchiveVolumes();
         var volumes = Persistence.Instance.GetArchiveVolumesList();
         foreach (string volume in volumes)
         {
+            Console.WriteLine(volume);
             var academicYear = AcademicYearFactory.CreateFromYearRange(volume);
             ScrapeAllForYear(academicYear);
+            if (academicYear.Name == oldestYearRangeToScrape)
+            {
+                Console.WriteLine($"Scraping was configured to stop after {oldestYearRangeToScrape}");
+                break;
+            }
         }
     }
 
     public void ScrapeAllForYear(AcademicYear academicYear)
     {
-        ScrapeCourseArchive(academicYear);
+        //ScrapeCourseArchive(academicYear);
         ScrapeInfo(academicYear);
         ScrapeEvalUrlSearch(academicYear);
         foreach (Term term in academicYear.Terms)
@@ -61,7 +67,12 @@ public class ScrapingManager
         PageSources.Clear();
         Urls.AddRange(UrlManagement.GetCourseArchiveUrls(academicYear));
         ProcessUrls();
-        CombineCourseArchive();
+        Console.WriteLine("test");
+        foreach (var key in PageSources.Keys)
+        {
+            Console.WriteLine(key);
+        }
+        CombineCourseArchiveForSpecifiedYear(academicYear);
         Persistence.WriteCourseHtml(PageSources, academicYear);
         PageSources.Clear();
     }
@@ -123,36 +134,23 @@ public class ScrapingManager
 
     private void ProcessUrls()
     {
-        using IWebDriver webDriver = InitializeWebDriver(timeOutDurationMilliseconds);
-        using HttpClient httpClient = InitializeHttpClient(timeOutDurationMilliseconds);
+        IWebDriver webDriver = InitializeWebDriver(timeOutDurationMilliseconds);
+        HttpClient httpClient = InitializeHttpClient(timeOutDurationMilliseconds);
         foreach (string url in Urls)
         {
+            Console.WriteLine("Fetching Page Source of "+url);
             IUrlAccessStrategy urlAccessStrategy = SelectUrlAccessStrategy(url);
             string pageSource = urlAccessStrategy.Execute(url, sleepDurationMilliseconds, httpClient, webDriver);
             PageSources[url] = pageSource;
         }
         Urls.Clear();
+        webDriver.Quit();
+        httpClient.Dispose();
     }
 
-    private void CombineCourseArchive()
+
+    private void CombineCourseArchiveForSpecifiedYear(AcademicYear academicYear)
     {
-        // DTU's Course archive cannot display all courses on one page
-        // Instead, we have a page for all courses starting with A, and B, and C, and so on
-        // This method joins all the page sources together into one big page source.
-        string archiveVolumesUrl = UrlManagement.ArchiveVolumesUrl;
-        string archiveVolumesHtml = PageSources[archiveVolumesUrl];
-        string url = UrlManagement.GetUrlForArchiveVolumes();
-        ArchiveVolumesParser archiveVolumesParser = new(archiveVolumesHtml, url);
-        List<string> yearRanges = archiveVolumesParser.YearRanges;
-        foreach(string yearRange in yearRanges)
-        {
-            // Join letter A, B, C, ... Z page sources for each academic year
-            CombineCourseArchiveForSpecifiedYear(yearRange);
-        }
-    }
-    private void CombineCourseArchiveForSpecifiedYear(string yearRange)
-    {
-        AcademicYear academicYear = AcademicYearFactory.CreateFromYearRange(yearRange);
         List<string> urls = UrlManagement.GetCourseArchiveUrls(academicYear);
         string key = UrlManagement.GetUrlForSpecificVolume(academicYear);
         string value = "";
@@ -163,22 +161,25 @@ public class ScrapingManager
         PageSources[key] = value;
     }
 
-    private static IWebDriver InitializeWebDriver(int timeOutInSeconds)
+    public static IWebDriver InitializeWebDriver(int timeOutInSeconds)
     {
         ChromeOptions options = new()
         {
             PageLoadStrategy = PageLoadStrategy.Normal
         };
         options.AddArgument("--disable-extensions");
-        using IWebDriver driver = new ChromeDriver(options);
+        IWebDriver driver = new ChromeDriver(options);
         driver.Manage().Timeouts().PageLoad = TimeSpan.FromMilliseconds(timeOutInSeconds);
         return driver;
     }
 
-    private static HttpClient InitializeHttpClient(int timeOutInSeconds)
+
+    public static HttpClient InitializeHttpClient(int timeOutInSeconds)
     {
-        using HttpClient httpClient = new();
-        httpClient.Timeout = TimeSpan.FromSeconds(timeOutInSeconds);
+        HttpClient httpClient = new()
+        {
+            Timeout = TimeSpan.FromSeconds(timeOutInSeconds)
+        };
         return httpClient;
     }
 
