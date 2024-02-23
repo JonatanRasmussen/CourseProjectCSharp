@@ -37,11 +37,22 @@ public class Eval
         ResponseTypeVeryHigh = CountResponseType(EvalAnswerOptions.VeryHigh);
         TrueAverage = CalculateTrueAverage();
         TweakedAverage = CalculateTweakedAverage();
-        ResponsePercentVeryLow = ResponseTypeVeryLow / TotalResponses;
-        ResponsePercentLow = ResponseTypeLow / TotalResponses;
-        ResponsePercentMiddle = ResponseTypeMiddle / TotalResponses;
-        ResponsePercentHigh = ResponseTypeHigh / TotalResponses;
-        ResponsePercentVeryHigh = ResponseTypeVeryHigh / TotalResponses;
+        if (TotalResponses == 0)
+        {
+            ResponsePercentVeryLow = 0;
+            ResponsePercentLow = 0;
+            ResponsePercentMiddle = 0;
+            ResponsePercentHigh = 0;
+            ResponsePercentVeryHigh = 0;
+        }
+        else
+        {
+            ResponsePercentVeryLow = ResponseTypeVeryLow / TotalResponses;
+            ResponsePercentLow = ResponseTypeLow / TotalResponses;
+            ResponsePercentMiddle = ResponseTypeMiddle / TotalResponses;
+            ResponsePercentHigh = ResponseTypeHigh / TotalResponses;
+            ResponsePercentVeryHigh = ResponseTypeVeryHigh / TotalResponses;
+        }
     }
 
     public float CalculateTweakedAverage()

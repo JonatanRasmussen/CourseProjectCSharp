@@ -57,9 +57,14 @@ public static class UrlManagement
 
     public static string GetCourseEvalUrl(Term term, string courseCode)
     {
-        Dictionary<string, string> evalUrls = Persistence.Instance.GetEvalUrls();
+        AcademicYear academicYear = term.AcademicYear;
+        Dictionary<string, string> evalUrls = Persistence.Instance.GetEvalUrls(academicYear, courseCode);
         string key = GetKeyForEvalUrls(term.Name, courseCode);
-        return evalUrls[key];
+        if (evalUrls.TryGetValue(key, out string? value))
+        {
+            return value;
+        }
+        return string.Empty;
     }
 
     public static string GetCourseGradeUrl(Term term, string courseCode)

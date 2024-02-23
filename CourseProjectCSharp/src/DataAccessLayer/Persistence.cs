@@ -24,7 +24,7 @@ public class Persistence
         return parser.YearRanges;
     }
 
-    public List<string> GetCourseList(AcademicYear year)
+    public List<string> GetCourseList(AcademicYear year, int limit)
     {
         var htmlDictionary = GetCourseHtml(year);
         string url = UrlManagement.GetUrlForSpecificVolume(year);
@@ -35,7 +35,14 @@ public class Persistence
             html = value;
         }
         CourseArchiveParser parser = new(html, key);
-        return parser.CourseList;
+        if (limit <= 0)
+        {
+            List<string> fullCourseList = parser.CourseList;
+            return fullCourseList;
+        }
+        List<string> partialCourseList = parser.CourseList.Take(limit).ToList();
+        Console.WriteLine($"Course list was configured to only onclude the first {limit} courses");
+        return partialCourseList;
     }
 
     public EvalPage GetEvalPage(Term term, string courseCode)
@@ -83,15 +90,17 @@ public class Persistence
         return page;
     }
 
-    public Dictionary<string,string> GetEvalUrls ()
+    public Dictionary<string,string> GetEvalUrls(AcademicYear year, string courseCode)
     {
-        var htmlDictionary = GetHrefDigitsHtml();
-        string url = UrlManagement.GetUrlForHrefDigits();
+        var htmlDictionary = GetHrefDigitsHtml(year);
         string html = string.Empty;
-        string key = url;
+        string key = courseCode;
         if (htmlDictionary.TryGetValue(key, out string? value))
         {
             html = value;
+        }
+        else{
+            Console.WriteLine($"CustomError: In GetEvalUrls, key {key} does not exist in hrefDigitsHtmlDictionary");
         }
         EvalUrlSearch parser = new(html, key);
         return parser.EvalUrlDictionary;
@@ -127,9 +136,9 @@ public class Persistence
         WriteJson(filePath, dict);
     }
 
-    public static void WriteHrefDigitsHtml(Dictionary<string, string> dict)
+    public static void WriteHrefDigitsHtml(Dictionary<string, string> dict, AcademicYear year)
     {
-        string filePath = HrefDigitsFileName();
+        string filePath = HrefDigitsFileName(year);
         WriteJson(filePath, dict);
     }
 
@@ -158,9 +167,9 @@ public class Persistence
         return GetOrReadInfoJson(() => OpenInfoHtmlJson(year), year);
     }
 
-    private Dictionary<string, string> GetHrefDigitsHtml()
+    private Dictionary<string, string> GetHrefDigitsHtml(AcademicYear year)
     {
-        return GetOrReadHrefDigitsJson(() => OpenHrefDigitsHtmlJson());
+        return GetOrReadHrefDigitsJson(() => OpenHrefDigitsHtmlJson(year), year);
     }
 
     private Dictionary<string, string> GetOrReadArchiveVolumesJson(Func<Dictionary<string, string>> jsonOpener)
@@ -193,9 +202,9 @@ public class Persistence
         return GetOrReadJsonInternal(jsonOpener, filePath);
     }
 
-    private Dictionary<string, string> GetOrReadHrefDigitsJson(Func<Dictionary<string, string>> jsonOpener)
+    private Dictionary<string, string> GetOrReadHrefDigitsJson(Func<Dictionary<string, string>> jsonOpener, AcademicYear year)
     {
-        string filePath = $"{ScrapedHtmlFolder}{HrefDigitsFileName()}";
+        string filePath = $"{ScrapedHtmlFolder}{HrefDigitsFileName(year)}";
         return GetOrReadJsonInternal(jsonOpener, filePath);
     }
 
@@ -244,9 +253,9 @@ public class Persistence
         return ReadJson(filePath);
     }
 
-    private Dictionary<string, string> OpenHrefDigitsHtmlJson()
+    private Dictionary<string, string> OpenHrefDigitsHtmlJson(AcademicYear year)
     {
-        string filePath = HrefDigitsFileName();
+        string filePath = HrefDigitsFileName(year);
         return ReadJson(filePath);
     }
 
@@ -271,6 +280,7 @@ public class Persistence
             string fullPath = Path.GetFullPath(Path.Combine(baseDirectory, "..\\..\\..\\..", filePath));
             JsonSerializerOptions options = new() { WriteIndented = true };
             string json = JsonSerializer.Serialize(dict, options);
+            Console.WriteLine("Writing at Path: "+fullPath);
             File.WriteAllText(fullPath, json);
         }
         catch (Exception ex)
@@ -304,8 +314,8 @@ public class Persistence
         return $"{ScrapedHtmlFolder}{year.Name}__info.json";
     }
 
-    private static string HrefDigitsFileName()
+    private static string HrefDigitsFileName(AcademicYear year)
     {
-        return $"{ScrapedHtmlFolder}hrefDigits.json";
+        return $"{ScrapedHtmlFolder}{year.Name}__hrefDigits.json";
     }
 }

@@ -36,12 +36,9 @@ public class CourseArchiveParser
 
     private Dictionary<string, string> ParseCourseDictionary()
     {
-        string start = "<tr>\\s*<td><a\\s+href=\"/course/\\d{4}-\\d{4}/";
-        string middle = "([a-zA-Z0-9]{5})\">";
-        string titleStart = "</a></td>\\s*<td><a\\s+href=\"/course/\\d{4}-\\d{4}/[a-zA-Z0-9]{5}\">";
-        string titleMiddle = "(\\w+(?:\\s+\\w+)*)";
-        string titleEnd = "</a></td>\\s*</tr>";
-        string pattern = $"{start}{middle}{titleStart}{titleMiddle}{titleEnd}";
-        return ParserUtils.GetDictionary(pattern, PageSource);
+        string pattern = @"<tr>\s+<td><a\s+href=""/course/\d{4}-\d{4}/([a-zA-Z0-9]{5})"">([^<]+)</a></td>\s+<td><a\s+href=""[^""]+"">([^<]+)</a></td>\s+</tr>";
+        // Decode HTML entities such as Æ, Ø and Å in PageSource
+        string decodedPageSource = System.Web.HttpUtility.HtmlDecode(PageSource);
+        return ParserUtils.GetDictionary(pattern, decodedPageSource);
     }
 }

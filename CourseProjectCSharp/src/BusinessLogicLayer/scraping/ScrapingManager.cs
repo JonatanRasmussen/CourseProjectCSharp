@@ -24,15 +24,14 @@ public class ScrapingManager
         PageSources = new();
     }
 
-    public void ScrapeAll(string oldestYearRangeToScrape)
+    public void ScrapeAll(string oldestYearRangeToScrape, int courseLimit)
     {
         ScrapeArchiveVolumes();
         var volumes = Persistence.Instance.GetArchiveVolumesList();
         foreach (string volume in volumes)
         {
-            Console.WriteLine(volume);
             var academicYear = AcademicYearFactory.CreateFromYearRange(volume);
-            ScrapeAllForYear(academicYear);
+            ScrapeAllForYear(academicYear, courseLimit);
             if (academicYear.Name == oldestYearRangeToScrape)
             {
                 Console.WriteLine($"Scraping was configured to stop after {oldestYearRangeToScrape}");
@@ -41,15 +40,15 @@ public class ScrapingManager
         }
     }
 
-    public void ScrapeAllForYear(AcademicYear academicYear)
+    public void ScrapeAllForYear(AcademicYear academicYear, int courseLimit)
     {
         //ScrapeCourseArchive(academicYear);
-        ScrapeInfo(academicYear);
-        ScrapeEvalUrlSearch(academicYear);
+        ScrapeInfo(academicYear, courseLimit);
+        ScrapeEvalUrlSearch(academicYear, courseLimit);
         foreach (Term term in academicYear.Terms)
         {
-            ScrapeEvals(term);
-            ScrapeGrades(term);
+            ScrapeEvals(term, courseLimit);
+            ScrapeGrades(term, courseLimit);
         }
     }
 
@@ -67,20 +66,15 @@ public class ScrapingManager
         PageSources.Clear();
         Urls.AddRange(UrlManagement.GetCourseArchiveUrls(academicYear));
         ProcessUrls();
-        Console.WriteLine("test");
-        foreach (var key in PageSources.Keys)
-        {
-            Console.WriteLine(key);
-        }
         CombineCourseArchiveForSpecifiedYear(academicYear);
         Persistence.WriteCourseHtml(PageSources, academicYear);
         PageSources.Clear();
     }
 
-    public void ScrapeEvals(Term term)
+    public void ScrapeEvals(Term term, int courseListMaxLength)
     {
         PageSources.Clear();
-        List<string> courseList = Persistence.Instance.GetCourseList(term.AcademicYear);
+        List<string> courseList = Persistence.Instance.GetCourseList(term.AcademicYear, courseListMaxLength);
         foreach (string courseCode in courseList)
         {
             string url = UrlManagement.GetCourseEvalUrl(term, courseCode);
@@ -91,10 +85,10 @@ public class ScrapingManager
         PageSources.Clear();
     }
 
-    public void ScrapeGrades(Term term)
+    public void ScrapeGrades(Term term, int courseListMaxLength)
     {
         PageSources.Clear();
-        List<string> courseList = Persistence.Instance.GetCourseList(term.AcademicYear);
+        List<string> courseList = Persistence.Instance.GetCourseList(term.AcademicYear, courseListMaxLength);
         foreach (string courseCode in courseList)
         {
             string url = UrlManagement.GetCourseGradeUrl(term, courseCode);
@@ -105,10 +99,10 @@ public class ScrapingManager
         PageSources.Clear();
     }
 
-    public void ScrapeInfo(AcademicYear academicYear)
+    public void ScrapeInfo(AcademicYear academicYear, int courseListMaxLength)
     {
         PageSources.Clear();
-        List<string> courseList = Persistence.Instance.GetCourseList(academicYear);
+        List<string> courseList = Persistence.Instance.GetCourseList(academicYear, courseListMaxLength);
         foreach (string courseCode in courseList)
         {
             string url = UrlManagement.GetCourseInfoUrl(academicYear, courseCode);
@@ -119,16 +113,16 @@ public class ScrapingManager
         PageSources.Clear();
     }
 
-    public void ScrapeEvalUrlSearch(AcademicYear academicYear)
+    public void ScrapeEvalUrlSearch(AcademicYear academicYear, int courseListMaxLength)
     {
         PageSources.Clear();
-        List<string> courseList = Persistence.Instance.GetCourseList(academicYear);
+        List<string> courseList = Persistence.Instance.GetCourseList(academicYear, courseListMaxLength);
         foreach (string courseCode in courseList)
         {
             Urls.Add(courseCode);
         }
         ProcessUrls();
-        Persistence.WriteHrefDigitsHtml(PageSources);
+        Persistence.WriteHrefDigitsHtml(PageSources, academicYear);
         PageSources.Clear();
     }
 

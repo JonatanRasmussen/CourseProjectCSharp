@@ -92,16 +92,17 @@ public class EvalParser : IEvalParser
             // If the third-last char is a whitespace, it is Jan/Jun/Jul/Aug and should be converted to "E" or "F"
             if (result[^3] == ' ')
             {
-                string termEvalFormat = result.Substring(result.Length - 6);
+                string termEvalFormat = result[^6..];
                 termEvalFormat = termEvalFormat.Replace("Jan ", "E");
                 termEvalFormat = termEvalFormat.Replace("Jun ", "F");
                 termEvalFormat = termEvalFormat.Replace("Jul ", "F");
                 termEvalFormat = termEvalFormat.Replace("Aug ", "F");
+                termEvalFormat = termEvalFormat.Replace("mer ", "F");
                 return termEvalFormat;
             }
             else
             {
-                return result.Substring(result.Length - 3);
+                return result[^3..];
             }
         }
         return string.Empty;

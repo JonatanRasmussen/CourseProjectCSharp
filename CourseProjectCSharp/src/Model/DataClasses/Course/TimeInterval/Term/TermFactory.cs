@@ -101,7 +101,11 @@ public class TermFactory
 
     private static DtuSemesterType ParseSemester(string termCode)
     {
-        string firstLetter = termCode[..1];
+        string firstLetter = Term.UnknownSemesterCode;
+        if (termCode.Length != 0)
+        {
+            firstLetter = termCode[..1];
+        }
         if (firstLetter == Term.AutumnSemesterCode || firstLetter.ToLower() == "v")
         {
             return DtuSemesterType.Autumn;
@@ -112,7 +116,8 @@ public class TermFactory
         }
         else
         {
-            throw new ArgumentOutOfRangeException(nameof(firstLetter), "Unknown semester key");
+            Console.WriteLine($"Warning: The letter '{firstLetter}' could not be parsed as semester");
+            return DtuSemesterType.EmptyValue;
         };
     }
 

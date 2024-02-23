@@ -19,7 +19,7 @@ public class AcademicYear
         TwoDigitStartYear = StartYear - 2000;
         TwoDigitEndYear = EndYear - 2000;
         Name = $"{StartYear}-{EndYear}"; // This naming format is also used on DTU's Website
-        Terms = new();
+        Terms = GenerateTermsForYear();
     }
 
     public static AcademicYear CreateEmpty()
@@ -43,5 +43,12 @@ public class AcademicYear
             return true;
         }
         return false;
+    }
+
+    private List<Term> GenerateTermsForYear()
+    {
+        Term autumnTerm = TermFactory.Create(DtuSemesterType.Autumn, this);
+        Term springTerm = TermFactory.Create(DtuSemesterType.Spring, this);
+        return new List<Term> { autumnTerm, springTerm };
     }
 }

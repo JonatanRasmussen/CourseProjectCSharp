@@ -15,7 +15,8 @@ class Program
     {
         ScrapingManager scrapeManager = new();
         string oldestYearRangeToScrape = "2021-2022";
-        scrapeManager.ScrapeAll(oldestYearRangeToScrape);
+        int courseLimit = 0;
+        scrapeManager.ScrapeAll(oldestYearRangeToScrape, courseLimit);
 /*         using (IWebDriver webDriver = ScrapingManager.InitializeWebDriver(5000))
         {
             Console.WriteLine("webdrivertest2");
